@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  		<meta name="description" content="">
+  		<meta name="keywords" content="">
+  		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  		<!-- Set render engine for 360 browser -->
+		<meta name="renderer" content="webkit">
+
+		<!-- No Baidu Siteapp-->
+		<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+		<link rel="icon" type="image/png" href="assets/i/favicon.png">
+
+		<!-- Add to homescreen for Chrome on Android -->
+		<meta name="mobile-web-app-capable" content="yes">
+		<link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
+
+		<!-- Add to homescreen for Safari on iOS -->
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-title" content="投资风险大赛"/>
+		<link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+
+		<!-- Tile icon for Win8 (144x144 + tile color) -->
+		<meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">
+		<meta name="msapplication-TileColor" content="#0e90d2">
+
+		<link rel="stylesheet" type="text/css" href="assets/css/amazeui.min.css">
+		<link rel="stylesheet" type="text/css" title="play" href="style.css" />
+		<title>投资风险大赛——投资选择</title>
+	</head>
+	<body>
+		<section id="invest" class="am-container">
+			<!-- 这里是每天的新闻 -->
+			<section id="daily-info">
+				<header class="daily-info-header am-u-sm-4 am-u-sm-centered">
+					<h2>第n天</h2>
+				</header>
+
+				<div class="daily-info-event">
+					<p><blockquote>这个是第一天的信息</blockquote></p>
+					<img src="imgs/.....jpg" alt="">
+				</div>
+			</section>
+			<!-- 这里是投资表单，可以选择本金投入，然后选择杠杆 -->
+			<section id="invest-form">
+				<div>您目前拥有本金1000，准备投入1000</div>
+				<div>拖动滑动条选择你投入本次交易的金额</div>
+				<input type="text" id="invest-base"> <!-- 这个是 -->
+
+				<div>选择你准备给交易配资杠杆</div>
+				<input type="text" id="invest-lever">
+
+				<input type="button" value="确认本轮投资">
+			</section>
+		</section>
+
+
+		<section id="result" class="am-container">
+			<div class="invest-info">你投入10000本金，加上n倍杠杆，。。。。</div>
+			<div class="invest-animation">股市动画效果</div>
+			<!-- am-badge am-badge-success am-radius -->
+			<div class="invest-result">本次交易<span class="am-badge am-badge-danger am-radius">获利(亏损)</span><strong>1000</strong>，您最终本金为<strong>11000</strong></div>
+			<!-- 进度条 -->
+			<div class="am-progress">
+				<div class="am-progress-bar" style="width: 40%">40%</div>
+			</div>
+		</section>
+
+		<script src="scripts/play.js"></script>
+	</body>
+</html>
