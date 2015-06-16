@@ -30,7 +30,7 @@
 		<meta name="msapplication-TileColor" content="#0e90d2">
 
 		<link rel="stylesheet" type="text/css" href="assets/css/amazeui.min.css">
-		<link rel="stylesheet" type="text/css" title="play" href="style.css" />
+		<link rel="stylesheet" type="text/css" href="style.css" />
 		<title>投资风险大赛——投资选择</title>
 	</head>
 	<body>
@@ -53,9 +53,23 @@
 				<input type="text" id="invest-base"> <!-- 这个是 -->
 
 				<div>选择你准备给交易配资杠杆</div>
-				<input type="text" id="invest-lever">
+				<!-- 多选框 am-disabled -->
+				<div class="am-btn-group" data-am-button>
+					  <label class="am-btn am-btn-primary">
+					    <input type="radio" name="options" value="选项 1" id="option1"> 选项 1
+					  </label>
+					  <label class="am-btn am-btn-primary">
+					    <input type="radio" name="options" value="选项 2" id="option2"> 选项 2
+					  </label>
+					  <label class="am-btn am-btn-primary">
+					    <input type="radio" name="options" value="选项 3" id="option3"> 选项 3
+					  </label>
+					  <label class="am-btn am-btn-primary">
+					    <input type="radio" name="options" value="选项 4" id="option4"> 选项 4
+					  </label>
+				</div>
 
-				<input type="button" value="确认本轮投资">
+				<input class="am-btn am-btn-primary" type="button" value="确认本轮投资">
 			</section>
 		</section>
 
@@ -70,7 +84,9 @@
 				<div class="am-progress-bar" style="width: 40%">40%</div>
 			</div>
 		</section>
-
+		
+		<script type="text/javascript" src="assets/jquery.min.js"></script>
+		<script type="text/javascript" src="assets/js/amazeui.min.js"></script>
 		<script src="scripts/play.js"></script>
 	</body>
 </html>
