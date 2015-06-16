@@ -1,2 +1,2 @@
 # RiskDemo
-Risk Demo for SZSE
+Risk Demo for contest
