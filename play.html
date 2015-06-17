@@ -42,7 +42,7 @@
 				</header>
 
 				<div class="daily-info-event">
-					<p><blockquote>这个是第一天的信息</blockquote></p>
+					<p><blockquote>这个是第一天的信息:央行降准降息了</blockquote></p>
 					<img src="imgs/.....jpg" alt="">
 				</div>
 			</section>
@@ -67,16 +67,19 @@
 				<!-- 多选框 am-disabled -->
 				<div id="lever-btn-group" class="am-btn-group" data-am-button>
 					  <label class="am-btn am-btn-default am-btn-sm am-active">
-					    <input type="radio" name="lever-options" value="1" id="lever-option1"> 选项 1
+					    <input type="radio" name="lever-options" value="0" id="lever-option1"> 无杠杆
 					  </label>
 					  <label class="am-btn am-btn-default am-btn-sm">
-					    <input type="radio" name="lever-options" value="2" id="lever-option2"> 选项 2
+					    <input type="radio" name="lever-options" value="1" id="lever-option2"> 1倍
 					  </label>
 					  <label class="am-btn am-btn-default am-btn-sm">
-					    <input type="radio" name="lever-options" value="3" id="lever-option3"> 选项 3
+					    <input type="radio" name="lever-options" value="2" id="lever-option3"> 2倍
 					  </label>
 					  <label class="am-btn am-btn-default am-btn-sm">
-					    <input type="radio" name="lever-options" value="4" id="lever-option4"> 选项 4
+					    <input type="radio" name="lever-options" value="3" id="lever-option4"> 3倍
+					  </label>
+					  <label class="am-btn am-btn-default am-btn-sm">
+					    <input type="radio" name="lever-options" value="4" id="lever-option5"> 4倍
 					  </label>
 				</div>
 
@@ -89,6 +92,7 @@
 			<div class="invest-info">你投入10000本金，加上n倍杠杆，。。。。</div>
 			<div class="invest-animation">股市动画效果</div>
 			<!-- am-badge am-badge-success am-radius -->
+			<div id="container" style="min-width: 500px; height: 400px; margin: 0 auto"></div>
 			<div class="invest-result">本次交易<span class="am-badge am-badge-danger am-radius">获利(亏损)</span><strong>1000</strong>，您最终本金为<strong>11000</strong></div>
 			<!-- 进度条 -->
 			<div class="am-progress am-progress-striped am-progress-sm am-active">
@@ -97,6 +101,7 @@
 		</section>
 		
 		<script type="text/javascript" src="assets/jquery.min.js"></script>
+		<script type="text/javascript" src="assets/highcharts.js"></script>
 		<script type="text/javascript" src="assets/js/amazeui.min.js"></script>
 		<script type="text/javascript" src="assets/handlebars.min.js"></script>
 		<script src="scripts/play.js"></script>
