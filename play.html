@@ -49,17 +49,17 @@
 			<!-- 这里是投资表单，可以选择本金投入，然后选择杠杆 -->
 			<section id="invest-form">
 				<div>您目前拥有本金{{BASE_MONEY}}</div>
-				<label>选择你投入本次交易的金额，准备投入1000</label>
+				<label>选择你投入本次交易的金额，准备投入<span id="invest-money">1000</span></label>
 				<!-- 这个选择本次投入的本金 -->
 				<div id="base-btn-group" class="am-btn-group" data-am-button>
 					  <label class="am-btn am-btn-default am-btn-sm">
-					    <input type="radio" name="options" value="小量投入" id="base-option1"> 小量投入
+					    <input type="radio" name="base-options" value="1" id="base-option1"> 小量投入
 					  </label>
 					  <label class="am-btn am-btn-default am-btn-sm">
-					    <input type="radio" name="options" value="大量投入" id="base-option2"> 大量投入
+					    <input type="radio" name="base-options" value="2" id="base-option2"> 大量投入
 					  </label>
 					  <label class="am-btn am-btn-default am-btn-sm am-active">
-					    <input type="radio" name="options" value="全部投入" id="base-option3"> 全部投入
+					    <input type="radio" name="base-options" value="3" id="base-option3"> 全部投入
 					  </label>
 				</div> 
 
@@ -67,16 +67,16 @@
 				<!-- 多选框 am-disabled -->
 				<div id="lever-btn-group" class="am-btn-group" data-am-button>
 					  <label class="am-btn am-btn-default am-btn-sm am-active">
-					    <input type="radio" name="options" value="选项 1" id="lever-option1"> 选项 1
+					    <input type="radio" name="lever-options" value="1" id="lever-option1"> 选项 1
 					  </label>
 					  <label class="am-btn am-btn-default am-btn-sm">
-					    <input type="radio" name="options" value="选项 2" id="lever-option2"> 选项 2
+					    <input type="radio" name="lever-options" value="2" id="lever-option2"> 选项 2
 					  </label>
 					  <label class="am-btn am-btn-default am-btn-sm">
-					    <input type="radio" name="options" value="选项 3" id="lever-option3"> 选项 3
+					    <input type="radio" name="lever-options" value="3" id="lever-option3"> 选项 3
 					  </label>
 					  <label class="am-btn am-btn-default am-btn-sm">
-					    <input type="radio" name="options" value="选项 4" id="lever-option4"> 选项 4
+					    <input type="radio" name="lever-options" value="4" id="lever-option4"> 选项 4
 					  </label>
 				</div>
 
@@ -91,8 +91,8 @@
 			<!-- am-badge am-badge-success am-radius -->
 			<div class="invest-result">本次交易<span class="am-badge am-badge-danger am-radius">获利(亏损)</span><strong>1000</strong>，您最终本金为<strong>11000</strong></div>
 			<!-- 进度条 -->
-			<div class="am-progress">
-				<div class="am-progress-bar" style="width: 40%">40%</div>
+			<div class="am-progress am-progress-striped am-progress-sm am-active">
+				<div id="result-progress-bar" class="am-progress-bar" style="width: 0%">0%</div>
 			</div>
 		</section>
 		
