@@ -49,7 +49,7 @@
 			<!-- 这里是投资表单，可以选择本金投入，然后选择杠杆 -->
 			<section id="invest-form">
 				<div>您目前拥有本金{{BASE_MONEY}}</div>
-				<label>选择你投入本次交易的金额，准备投入<span id="invest-money">1000</span></label>
+				<label>选择你投入本次交易的金额，准备投入<span id="invest-money">{{BASE_MONEY}}</span>，剩余本金<span id="left-money">0</span></label>
 				<!-- 这个选择本次投入的本金 -->
 				<div id="base-btn-group" class="am-btn-group" data-am-button>
 					  <label class="am-btn am-btn-default am-btn-sm">
@@ -89,15 +89,21 @@
 
 
 		<section id="result" class="am-container">
-			<div class="invest-info">你投入10000本金，加上n倍杠杆，。。。。</div>
+			<div class="invest-info">你投入{{investMoney}}本金，加上{{level}}倍杠杆，。。。。</div>
 			<div class="invest-animation">股市动画效果</div>
 			<!-- am-badge am-badge-success am-radius -->
 			<div id="container" style="min-width: 500px; height: 400px; margin: 0 auto"></div>
-			<div class="invest-result">本次交易<span class="am-badge am-badge-danger am-radius">获利(亏损)</span><strong>1000</strong>，您最终本金为<strong>11000</strong></div>
-			<!-- 进度条 -->
+			<div class="invest-result">本次交易
+			{{#compare profit 0}}
+				<span class="am-badge am-badge-danger am-radius">获利</span>
+			{{else}}
+    			<span class="am-badge am-badge-success am-radius">亏损</span>
+  			{{/compare}}<strong>{{profit}}</strong>，您最终本金为<strong>{{BASE_MONEY}}</strong></div>
+			<!-- 进度条 
 			<div class="am-progress am-progress-striped am-progress-sm am-active">
 				<div id="result-progress-bar" class="am-progress-bar" style="width: 0%">0%</div>
-			</div>
+			</div>-->
+			<input id="next-confirm-btn" class="am-btn am-btn-primary" type="button" value="进入下一轮投资">
 		</section>
 		
 		<script type="text/javascript" src="assets/jquery.min.js"></script>
