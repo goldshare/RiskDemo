@@ -1,5 +1,5 @@
 (function(){
-	var MAX_ROUNDS = 20;
+	var MAX_ROUNDS = 4;
 
 	var invest_status = { 
 		BASE_MONEY : 10000, //$ original 
@@ -9,7 +9,12 @@
 	var investMoney;
 	var leftMoney;
 	var level;
-	var odds = 10;
+
+	var originalArray=[];//原数组
+	for (var i=0;i<MAX_ROUNDS;i++)
+	{ 
+		originalArray[i]= i; 
+	} 
 
 	$(document).ready(function() {
 		//get compiled template function
@@ -30,7 +35,7 @@
 	       }
 	     });
 		//firstly loads daily info into 
-		var getDailyInfo = function(callback) {
+		var _getDailyInfo = function(callback) {
 			var jqxhr = $.getJSON( "example.json")
 			.success(function(data) {
 			  	// console.log( "success" );
@@ -43,6 +48,13 @@
 
 			jqxhr.complete(callback);
 		};
+
+		var getDailyInfo = function(callback){
+			var day = getRandom();
+			//console.log(data[day]);
+			dailyInfo = $.extend({}, data[day], invest_status);
+			callback();
+		}
 
 		//deal with every turn
 		var contentRefresh = function($container, template, json) {
@@ -58,6 +70,7 @@
 
 			$('[name="base-options"]').on("change", function() {
 				investMoney = invest_status.BASE_MONEY * $(this).val() / 3;
+				investMoney = Math.round(investMoney*100)/100;
 				$("#invest-money").html(investMoney);
 				leftMoney = invest_status.BASE_MONEY - investMoney;
 				$("#left-money").html(leftMoney);
@@ -120,12 +133,16 @@
 		            layout: 'vertical',
 		            align: 'right',
 		            verticalAlign: 'middle',
+		            enabled: false,
 		            borderWidth: 0
 		        },
 		        series: [{
-		            name: '实时股价',
-		            data: [-1, -2, 0, -2, 1, 3, 5, 6, 10, 10]
-		        }]
+		            //name: '实时股价',
+		            data: getStockPoint(dailyInfo.odds)
+		        }],
+		        credits: {
+     				enabled: false
+				},
 		    });
 		};
 
@@ -163,6 +180,7 @@
 		var getResultJson = function(profit) {
 				return {
 					BASE_MONEY: invest_status.BASE_MONEY,
+					ROUNDS: invest_status.ROUNDS,
 					investMoney: investMoney,
 					level: level,
 					profit: profit
@@ -171,8 +189,9 @@
 
 		var showInvestResult = function() {
 			$invest.fadeOut();
-			var result = calc(investMoney,leftMoney,level,odds),
-				profit = result - invest_status.BASE_MONEY;
+			var result = calc(investMoney,leftMoney,level,dailyInfo.odds);
+			var profit = result - invest_status.BASE_MONEY;
+			profit = Math.round(profit*100)/100;
 			invest_status.BASE_MONEY = result;
 
 			contentRefresh($result, resultTemplate, getResultJson(profit));
@@ -184,11 +203,11 @@
 		  		//showProgressBar();
 		  		$("#next-confirm-btn").click(function(){
 		  			//real logic & do caculation
-				  	++invest_status.ROUNDS;
 				  	if(invest_status.ROUNDS >= MAX_ROUNDS){
-				  		location.ref = ""; //redirect
+				  		location.href = ""; //redirect
 				  	}
 				  	else {
+				  		++invest_status.ROUNDS;
 						startNewRounds();
 				  	}
 		  		});
@@ -213,7 +232,38 @@
 		var interestMoney = levelMoney*interestRate; //利息
 		var earnMoney = (principal + levelMoney)*odds/100;
 		var leftInvestMoney = principal + earnMoney - interestMoney + leftMoney;
+		leftInvestMoney = Math.round(leftInvestMoney*100)/100;
 		return leftInvestMoney;
+	}
+
+	/*getRandom:获取不重复的随机值
+	 *返回值范围：0-（MAX_ROUNDS-1）
+	 */
+	var getRandom = function(){
+		//给原数组originalArray赋值 
+		var index=Math.floor(Math.random()*originalArray.length); //随机取一个位置 
+		var value = originalArray[parseInt(index)];
+		originalArray.splice(index,1);
+		return value;
+	}
+
+    /*getStockPoint:获取股票振幅
+     *odds：当天幅度
+	 *返回值范围：-10,10 
+	 *10个数数组
+	 */
+	var getStockPoint = function(odds){
+		var resultArray=[];
+		var n = 10;
+		var high = 10;
+		var lower = -10;
+		for (var i=0;i<n-1;i++)
+		{ 
+			var value=Math.round((Math.random()*((high - lower +1) + lower))*100)/100;  
+			resultArray[i]= value; 
+		} 
+		resultArray[n-1]= odds;
+		return resultArray;
 	}
 
 })();

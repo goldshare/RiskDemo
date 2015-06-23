@@ -42,8 +42,8 @@
 				</header>
 
 				<div class="daily-info-event">
-					<p><blockquote>这个是第一天的信息:央行降准降息了</blockquote></p>
-					<img src="imgs/.....jpg" alt="">
+					<p><blockquote>这个是第{{ROUNDS}}天的信息:{{news}}</blockquote></p>
+					<!-- <img src="imgs/.....jpg" alt=""> -->
 				</div>
 			</section>
 			<!-- 这里是投资表单，可以选择本金投入，然后选择杠杆 -->
@@ -89,10 +89,13 @@
 
 
 		<section id="result" class="am-container">
+			<header class="daily-info-header am-u-sm-4 am-u-sm-centered">
+					<h2>第{{ROUNDS}}天战况</h2>
+			</header>
 			<div class="invest-info">你投入{{investMoney}}本金，加上{{level}}倍杠杆，。。。。</div>
 			<div class="invest-animation">股市动画效果</div>
 			<!-- am-badge am-badge-success am-radius -->
-			<div id="container" style="min-width: 500px; height: 400px; margin: 0 auto"></div>
+			<div id="container" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
 			<div class="invest-result">本次交易
 			{{#compare profit 0}}
 				<span class="am-badge am-badge-danger am-radius">获利</span>
@@ -110,6 +113,7 @@
 		<script type="text/javascript" src="assets/highcharts.js"></script>
 		<script type="text/javascript" src="assets/js/amazeui.min.js"></script>
 		<script type="text/javascript" src="assets/handlebars.min.js"></script>
+		<script src="scripts/data.js"></script>
 		<script src="scripts/play.js"></script>
 	</body>
 </html>
