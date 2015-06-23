@@ -133,12 +133,16 @@
 		            layout: 'vertical',
 		            align: 'right',
 		            verticalAlign: 'middle',
+		            enabled: false,
 		            borderWidth: 0
 		        },
 		        series: [{
-		            name: '实时股价',
+		            //name: '实时股价',
 		            data: getStockPoint(dailyInfo.odds)
-		        }]
+		        }],
+		        credits: {
+     				enabled: false
+				},
 		    });
 		};
 
