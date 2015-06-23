@@ -70,6 +70,7 @@
 
 			$('[name="base-options"]').on("change", function() {
 				investMoney = invest_status.BASE_MONEY * $(this).val() / 3;
+				investMoney = Math.round(investMoney*100)/100;
 				$("#invest-money").html(investMoney);
 				leftMoney = invest_status.BASE_MONEY - investMoney;
 				$("#left-money").html(leftMoney);
@@ -175,6 +176,7 @@
 		var getResultJson = function(profit) {
 				return {
 					BASE_MONEY: invest_status.BASE_MONEY,
+					ROUNDS: invest_status.ROUNDS,
 					investMoney: investMoney,
 					level: level,
 					profit: profit
@@ -183,8 +185,9 @@
 
 		var showInvestResult = function() {
 			$invest.fadeOut();
-			var result = calc(investMoney,leftMoney,level,dailyInfo.odds),
-				profit = result - invest_status.BASE_MONEY;
+			var result = calc(investMoney,leftMoney,level,dailyInfo.odds);
+			var profit = result - invest_status.BASE_MONEY;
+			profit = Math.round(profit*100)/100;
 			invest_status.BASE_MONEY = result;
 
 			contentRefresh($result, resultTemplate, getResultJson(profit));
@@ -196,11 +199,11 @@
 		  		//showProgressBar();
 		  		$("#next-confirm-btn").click(function(){
 		  			//real logic & do caculation
-				  	++invest_status.ROUNDS;
 				  	if(invest_status.ROUNDS >= MAX_ROUNDS){
-				  		location.ref = ""; //redirect
+				  		location.href = ""; //redirect
 				  	}
 				  	else {
+				  		++invest_status.ROUNDS;
 						startNewRounds();
 				  	}
 		  		});
@@ -225,6 +228,7 @@
 		var interestMoney = levelMoney*interestRate; //利息
 		var earnMoney = (principal + levelMoney)*odds/100;
 		var leftInvestMoney = principal + earnMoney - interestMoney + leftMoney;
+		leftInvestMoney = Math.round(leftInvestMoney*100)/100;
 		return leftInvestMoney;
 	}
 
