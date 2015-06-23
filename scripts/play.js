@@ -76,6 +76,9 @@
 			investMoney = invest_status.BASE_MONEY;
 			leftMoney = 0;
 			level = 0;
+			var callback = function() {
+				
+			}
 			//get info
 			getDailyInfo(function() {
 				contentRefresh($invest, investTemplate, dailyInfo);
@@ -83,6 +86,7 @@
 				$invest.show();
 				bindEvent();
 			});
+			
 		};
 		
 		var playStockAnimation = function() {
