@@ -36,18 +36,22 @@
 	<body>
 		<article>
 			<header></header>
-			<div id="content"></div>
+			<div id="content">我<label id="user-name"></label>在这个变态模拟盘游戏中撑过了<label id="rounds">m</label>轮, 不服来战！</div>
+
+			<input id="share-confirm-btn" class="am-btn am-btn-primary" type="button" value="分享">
 		</article>
 
 		<script type="text/javascript" src="assets/jquery.min.js"></script>
 		<script type="text/javascript">
 		(function(){
-			$(document).ready(function() {
-				var infos = window.location.search.split('&'),
+			var infos = window.location.search.split('&'),
 					user = (infos[0].split('='))[1],
 					score = (infos[1].split('='))[1],
 					rounds = (infos[2].split('='))[1];
-				
+
+			$(document).ready(function() {
+				$("#user-name").html(user);
+				$("#rounds").html(rounds);
 			});
 		})();
 		</script>

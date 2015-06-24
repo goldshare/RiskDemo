@@ -84,7 +84,7 @@
 			//loading animation
 			investMoney = invest_status.BASE_MONEY;
 			leftMoney = 0;
-			level = 0;
+			//level = 0;
 			var callback = function() {
 				
 			}
@@ -188,7 +188,7 @@
 
 	  		$("#name-confirm-btn").click(function() {
 	  			var name = $("#name-txt").val();
-	  			location.href = "result.html?u="+name+"&b="+invest_status.BASE_MONEY+"&r="+invest_status.ROUNDS;
+	  			location.href = "result.html?u="+encodeURIComponent(name)+"&b="+invest_status.BASE_MONEY+"&r="+invest_status.ROUNDS;
 	  		});
 		};
 
@@ -199,7 +199,7 @@
 
 			$("#lever-confirm-btn").click(function(){
 			$("#lever").hide();
-				level = $('[name="lever-options"]').val();
+				level = $('input[name="lever-options"]:checked').val();
 				startNewRounds();
 			});
 		};
