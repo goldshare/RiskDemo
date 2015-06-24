@@ -6,9 +6,9 @@
 		ROUNDS: 1
 	};
 	
-	var investMoney;
-	var leftMoney;
-	var level;
+	var investMoney=invest_status.BASE_MONEY;
+	var leftMoney=0;
+	var level=0;
 
 	var originalArray=[];//原数组
 	for (var i=0;i<MAX_ROUNDS;i++)
@@ -86,7 +86,7 @@
 			//loading animation
 			investMoney = invest_status.BASE_MONEY;
 			leftMoney = 0;
-			level = 0;
+			//level = 0;
 			var callback = function() {
 				
 			}
@@ -229,7 +229,7 @@
 			$result.hide();
 	  		$summary.show();
 	  		playSumMoneyAnimation();
-	  		
+
 	  		$("#name-confirm-btn").click(function() {
 	  			var name = $("#name-txt").val();
 	  			location.href = "result.html?u="+name+"&b="+invest_status.BASE_MONEY+"&r="+invest_status.ROUNDS;
@@ -242,8 +242,8 @@
 			$summary.hide();
 
 			$("#lever-confirm-btn").click(function(){
-			$("#lever").hide();
-				level = $('[name="lever-options"]').val();
+				level = $('input[name="lever-options"]:checked').val();
+				$("#lever").hide();
 				startNewRounds();
 			});
 		};
