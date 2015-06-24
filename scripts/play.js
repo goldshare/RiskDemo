@@ -6,15 +6,17 @@
 		ROUNDS: 1
 	};
 	
-	var investMoney;
-	var leftMoney;
-	var level;
+	var investMoney=invest_status.BASE_MONEY;
+	var leftMoney=0;
+	var level=0;
 
 	var originalArray=[];//原数组
 	for (var i=0;i<MAX_ROUNDS;i++)
 	{ 
 		originalArray[i]= i; 
 	} 
+
+	var sumArray=[];  //统计每天盈亏情况
 
 	$(document).ready(function() {
 		//get compiled template function
@@ -133,8 +135,49 @@
 		            borderWidth: 0
 		        },
 		        series: [{
-		            //name: '实时股价',
+		            name: '实时股价',
 		            data: getStockPoint(dailyInfo.odds)
+		        }],
+		        credits: {
+     				enabled: false
+				},
+		    });
+		};
+
+		var playSumMoneyAnimation = function() {
+			var numArray=[];
+			for(var i=0;i < sumArray.length;i++){
+				var numStr = "第"+(i+1)+"天";
+				numArray.push(numStr)
+			}
+			$('#summary-container').highcharts({
+		        title: {
+		            text: '我的盈亏',
+		            x: -20 //center
+		        },
+		        xAxis: {
+		            categories: numArray
+		        },
+		        yAxis: {
+		            title: {
+		                text: '盈亏额'
+		            },
+		            plotLines: [{
+		                value: 0,
+		                width: 1,
+		                color: '#808080'
+		            }]
+		        },
+		        legend: {
+		            layout: 'vertical',
+		            align: 'right',
+		            verticalAlign: 'middle',
+		            enabled: false,
+		            borderWidth: 0
+		        },
+		        series: [{
+		            name: '金额',
+		            data: sumArray
 		        }],
 		        credits: {
      				enabled: false
@@ -185,6 +228,7 @@
 			$invest.hide();
 			$result.hide();
 	  		$summary.show();
+	  		playSumMoneyAnimation();
 
 	  		$("#name-confirm-btn").click(function() {
 	  			var name = $("#name-txt").val();
@@ -198,8 +242,8 @@
 			$summary.hide();
 
 			$("#lever-confirm-btn").click(function(){
-			$("#lever").hide();
 				level = $('input[name="lever-options"]:checked').val();
+				$("#lever").hide();
 				startNewRounds();
 			});
 		};
@@ -209,6 +253,7 @@
 			var result = calc(investMoney,leftMoney,level,dailyInfo.odds);
 			var profit = result - invest_status.BASE_MONEY;
 			profit = Math.round(profit*100)/100;
+			sumArray.push(profit);
 			invest_status.BASE_MONEY = result;
 
 			contentRefresh($result, resultTemplate, getResultJson(profit));
