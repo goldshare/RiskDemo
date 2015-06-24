@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  		<meta name="description" content="">
+  		<meta name="keywords" content="">
+  		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  		<!-- Set render engine for 360 browser -->
+		<meta name="renderer" content="webkit">
+
+		<!-- No Baidu Siteapp-->
+		<meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+		<link rel="icon" type="image/png" href="assets/i/favicon.png">
+
+		<!-- Add to homescreen for Chrome on Android -->
+		<meta name="mobile-web-app-capable" content="yes">
+		<link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
+
+		<!-- Add to homescreen for Safari on iOS -->
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-title" content="投资风险大赛"/>
+		<link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+
+		<!-- Tile icon for Win8 (144x144 + tile color) -->
+		<meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">
+		<meta name="msapplication-TileColor" content="#0e90d2">
+
+		<link rel="stylesheet" type="text/css" href="assets/css/amazeui.min.css">
+		<link rel="stylesheet" type="text/css" href="style.css" />
+		<title>投资风险大赛——投资选择</title>
+	</head>
+	<body>
+		<section id="invest" class="am-container">
+			<!-- 这里是每天的新闻 -->
+			<section id="daily-info">
+				<header class="daily-info-header am-u-sm-4 am-u-sm-centered">
+					<h2>第{{ROUNDS}}天</h2>
+				</header>
+
+				<div class="daily-info-event">
+					<p><blockquote>这个是第{{ROUNDS}}天的信息:{{news}}</blockquote></p>
+					<!-- <img src="imgs/.....jpg" alt=""> -->
+				</div>
+			</section>
+			<!-- 这里是投资表单，可以选择本金投入，然后选择杠杆 -->
+			<section id="invest-form">
+				<div>您目前拥有本金{{BASE_MONEY}}</div>
+				<label>选择你投入本次交易的金额，准备投入<span id="invest-money">{{BASE_MONEY}}</span>，剩余本金<span id="left-money">0</span></label>
+				<!-- 这个选择本次投入的本金 -->
+				<div id="base-btn-group" class="am-btn-group" data-am-button>
+					  <label class="am-btn am-btn-default am-btn-sm">
+					    <input type="radio" name="base-options" value="1" id="base-option1"> 小量投入
+					  </label>
+					  <label class="am-btn am-btn-default am-btn-sm">
+					    <input type="radio" name="base-options" value="2" id="base-option2"> 大量投入
+					  </label>
+					  <label class="am-btn am-btn-default am-btn-sm am-active">
+					    <input type="radio" name="base-options" value="3" id="base-option3"> 全部投入
+					  </label>
+				</div> 
+
+				<label>选择你准备给交易配资杠杆</label>
+				<!-- 多选框 am-disabled -->
+				<div id="lever-btn-group" class="am-btn-group" data-am-button>
+					  <label class="am-btn am-btn-default am-btn-sm am-active">
+					    <input type="radio" name="lever-options" value="0" id="lever-option1"> 无杠杆
+					  </label>
+					  <label class="am-btn am-btn-default am-btn-sm">
+					    <input type="radio" name="lever-options" value="1" id="lever-option2"> 1倍
+					  </label>
+					  <label class="am-btn am-btn-default am-btn-sm">
+					    <input type="radio" name="lever-options" value="2" id="lever-option3"> 2倍
+					  </label>
+					  <label class="am-btn am-btn-default am-btn-sm">
+					    <input type="radio" name="lever-options" value="3" id="lever-option4"> 3倍
+					  </label>
+					  <label class="am-btn am-btn-default am-btn-sm">
+					    <input type="radio" name="lever-options" value="4" id="lever-option5"> 4倍
+					  </label>
+				</div>
+
+				<input id="invest-confirm-btn" class="am-btn am-btn-primary" type="button" value="确认本轮投资">
+			</section>
+		</section>
+
+
+		<section id="result" class="am-container">
+			<header class="daily-info-header am-u-sm-4 am-u-sm-centered">
+					<h2>第{{ROUNDS}}天战况</h2>
+			</header>
+			<div class="invest-info">你投入{{investMoney}}本金，加上{{level}}倍杠杆，。。。。</div>
+			<div class="invest-animation">股市动画效果</div>
+			<!-- am-badge am-badge-success am-radius -->
+			<div id="container" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
+			<div class="invest-result">本次交易
+			{{#compare profit 0}}
+				<span class="am-badge am-badge-danger am-radius">获利</span>
+			{{else}}
+    			<span class="am-badge am-badge-success am-radius">亏损</span>
+  			{{/compare}}<strong>{{profit}}</strong>，您最终本金为<strong>{{BASE_MONEY}}</strong></div>
+			<!-- 进度条 
+			<div class="am-progress am-progress-striped am-progress-sm am-active">
+				<div id="result-progress-bar" class="am-progress-bar" style="width: 0%">0%</div>
+			</div>-->
+			<input id="next-confirm-btn" class="am-btn am-btn-primary" type="button" value="进入下一轮投资">
+		</section>
+		
+		<script type="text/javascript" src="assets/jquery.min.js"></script>
+		<script type="text/javascript" src="assets/highcharts.js"></script>
+		<script type="text/javascript" src="assets/js/amazeui.min.js"></script>
+		<script type="text/javascript" src="assets/handlebars.min.js"></script>
+		<script src="scripts/data.js"></script>
+		<script src="scripts/play.js"></script>
+	</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "RiskDemo",
+  "version": "0.0.1",
+  "homepage": "https://github.com/chaozh/RiskDemo",
+  "authors": [
+    "chaozh <chao@hust.edu.cn>"
+  ],
+  "description": "for risk contest in SZSE",
+  "license": "Apache",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "amazeui": "~2.4.0"
+  }
+}
