@@ -31,39 +31,23 @@
 
 		<link rel="stylesheet" type="text/css" href="assets/css/amazeui.min.css">
 		<link rel="stylesheet" type="text/css" href="style.css" />
-		<title>投资风险大赛——项目介绍</title>
+		<title>投资风险大赛——最终结果</title>
 	</head>
 	<body>
 		<article>
-			<header><h1 class="contest-info-header am-u-sm-10 am-u-sm-centered">投资风险揭示游戏</h1></header>
-			<div id="game">
-				<p>
-					<blockquote>股市那么火，你想去赚赚</blockquote>
-	 				<blockquote>你豪气的拿出工作3年省下准备买房的10万元</blockquote>
-	 				<blockquote>听说最近配资交易很火, 楼上的小王靠4倍杠杆半年赚了400%迈上了人生的巅峰</blockquote>
-					<blockquote>这次有很多“可靠”的消息，搏一把！</blockquote>
- 				</p>
- 				<div class="am-u-sm-8 am-u-sm-centered">
- 					<input id="invest-confirm-btn" class="am-btn am-btn-primary" type="button" value="搏一把！开始赚钱！">
- 				</div>
-			</div>
-			<footer class="member-intro">
-				<p>游戏制作小组成员：</p>
-				<ul>
-					<li>李昂</li>
-					<li>周婷</li>
-					<li>付祖发</li>
-					<li>郑超</li>
-				</ul>
-			</footer>
+			<header></header>
+			<div id="content"></div>
 		</article>
+
 		<script type="text/javascript" src="assets/jquery.min.js"></script>
 		<script type="text/javascript">
 		(function(){
 			$(document).ready(function() {
-				$("#invest-confirm-btn").click(function(){
-					location.href = "play.html"
-				});
+				var infos = window.location.search.split('&'),
+					user = (infos[0].split('='))[1],
+					score = (infos[1].split('='))[1],
+					rounds = (infos[2].split('='))[1];
+				
 			});
 		})();
 		</script>

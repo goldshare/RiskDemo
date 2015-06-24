@@ -2,7 +2,7 @@
 	var MAX_ROUNDS = 4;
 
 	var invest_status = { 
-		BASE_MONEY : 10000, //$ original 
+		BASE_MONEY : 100000, //$ original 
 		ROUNDS: 1
 	};
 	
@@ -19,7 +19,8 @@
 	$(document).ready(function() {
 		//get compiled template function
 		var $invest = $("#invest"),
-			$result = $('#result');
+			$result = $('#result'),
+			$summary = $("#summary");
 
 		var dailyInfo = {};
 
@@ -75,11 +76,6 @@
 				leftMoney = invest_status.BASE_MONEY - investMoney;
 				$("#left-money").html(leftMoney);
 			});
-
-			$('[name="lever-options"]').on("change", function() {
-				//console.log($(this).val());
-				level = $(this).val();
-			});
 			
 		}
 
@@ -105,7 +101,7 @@
 		var playStockAnimation = function() {
 			$('#container').highcharts({
 		        title: {
-		            text: '宇宙科技股份有限公司股价变化图',
+		            text: '宇宙科技股份有限公司当天走势',
 		            x: -20 //center
 		        },
 		        subtitle: {
@@ -146,7 +142,7 @@
 		    });
 		};
 
-		var showProgressBar = function() {
+		/*var showProgressBar = function() {
 			var $progressBar = $('#result-progress-bar');
 			    var current_perc = 0;
 			    var deferred = $.Deferred();
@@ -175,16 +171,37 @@
 						startNewRounds();
 				  	}
 				});
-		}
+		}*/
 
 		var getResultJson = function(profit) {
-				return {
-					BASE_MONEY: invest_status.BASE_MONEY,
-					ROUNDS: invest_status.ROUNDS,
+				return $.extend(invest_status, {
 					investMoney: investMoney,
 					level: level,
 					profit: profit
-				};
+				});
+		};
+
+		var showSummary = function() {
+			$invest.hide();
+			$result.hide();
+	  		$summary.show();
+
+	  		$("#name-confirm-btn").click(function() {
+	  			var name = $("#name-txt").val();
+	  			location.href = "result.html?u="+name+"&b="+invest_status.BASE_MONEY+"&r="+invest_status.ROUNDS;
+	  		});
+		};
+
+		var gameStart = function() {
+			$invest.hide();
+			$result.hide();
+			$summary.hide();
+
+			$("#lever-confirm-btn").click(function(){
+			$("#lever").hide();
+				level = $('[name="lever-options"]').val();
+				startNewRounds();
+			});
 		};
 
 		var showInvestResult = function() {
@@ -204,7 +221,8 @@
 		  		$("#next-confirm-btn").click(function(){
 		  			//real logic & do caculation
 				  	if(invest_status.ROUNDS >= MAX_ROUNDS){
-				  		location.href = ""; //redirect
+				  		//input your name
+				  		showSummary();
 				  	}
 				  	else {
 				  		++invest_status.ROUNDS;
@@ -214,7 +232,9 @@
 		  	});
 		};
 		//do animation
-		startNewRounds();
+		//deal with lever
+		gameStart();
+		
 		
 	});
 	
