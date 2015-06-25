@@ -10,8 +10,9 @@
 	var leftMoney=0;
 	var level=0;
 
+	var len=35;
 	var originalArray=[];//原数组
-	for (var i=0;i<MAX_ROUNDS;i++)
+	for (var i=0;i<len;i++)
 	{ 
 		originalArray[i]= i; 
 	} 
