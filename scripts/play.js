@@ -1,14 +1,14 @@
 (function(){
-	var MAX_ROUNDS = 4;
+	var MAX_ROUNDS = 20;
 
 	var invest_status = { 
-		BASE_MONEY : 10000, //$ original 
+		BASE_MONEY : 100000, //$ original 
 		ROUNDS: 1
 	};
 	
-	var investMoney;
-	var leftMoney;
-	var level;
+	var investMoney=invest_status.BASE_MONEY;
+	var leftMoney=0;
+	var level=0;
 
 	var originalArray=[];//原数组
 	for (var i=0;i<MAX_ROUNDS;i++)
@@ -16,10 +16,13 @@
 		originalArray[i]= i; 
 	} 
 
+	var sumArray=[];  //统计每天盈亏情况
+
 	$(document).ready(function() {
 		//get compiled template function
 		var $invest = $("#invest"),
-			$result = $('#result');
+			$result = $('#result'),
+			$summary = $("#summary");
 
 		var dailyInfo = {};
 
@@ -75,11 +78,6 @@
 				leftMoney = invest_status.BASE_MONEY - investMoney;
 				$("#left-money").html(leftMoney);
 			});
-
-			$('[name="lever-options"]').on("change", function() {
-				//console.log($(this).val());
-				level = $(this).val();
-			});
 			
 		}
 
@@ -88,7 +86,7 @@
 			//loading animation
 			investMoney = invest_status.BASE_MONEY;
 			leftMoney = 0;
-			level = 0;
+			//level = 0;
 			var callback = function() {
 				
 			}
@@ -105,7 +103,7 @@
 		var playStockAnimation = function() {
 			$('#container').highcharts({
 		        title: {
-		            text: '宇宙科技股份有限公司股价变化图',
+		            text: '宇宙科技股份有限公司当天走势',
 		            x: -20 //center
 		        },
 		        subtitle: {
@@ -137,7 +135,7 @@
 		            borderWidth: 0
 		        },
 		        series: [{
-		            //name: '实时股价',
+		            name: '实时股价',
 		            data: getStockPoint(dailyInfo.odds)
 		        }],
 		        credits: {
@@ -146,7 +144,48 @@
 		    });
 		};
 
-		var showProgressBar = function() {
+		var playSumMoneyAnimation = function() {
+			var numArray=[];
+			for(var i=0;i < sumArray.length;i++){
+				var numStr = "第"+(i+1)+"天";
+				numArray.push(numStr)
+			}
+			$('#summary-container').highcharts({
+		        title: {
+		            text: '我的盈亏',
+		            x: -20 //center
+		        },
+		        xAxis: {
+		            categories: numArray
+		        },
+		        yAxis: {
+		            title: {
+		                text: '盈亏额'
+		            },
+		            plotLines: [{
+		                value: 0,
+		                width: 1,
+		                color: '#808080'
+		            }]
+		        },
+		        legend: {
+		            layout: 'vertical',
+		            align: 'right',
+		            verticalAlign: 'middle',
+		            enabled: false,
+		            borderWidth: 0
+		        },
+		        series: [{
+		            name: '金额',
+		            data: sumArray
+		        }],
+		        credits: {
+     				enabled: false
+				},
+		    });
+		};
+
+		/*var showProgressBar = function() {
 			var $progressBar = $('#result-progress-bar');
 			    var current_perc = 0;
 			    var deferred = $.Deferred();
@@ -175,16 +214,38 @@
 						startNewRounds();
 				  	}
 				});
-		}
+		}*/
 
 		var getResultJson = function(profit) {
-				return {
-					BASE_MONEY: invest_status.BASE_MONEY,
-					ROUNDS: invest_status.ROUNDS,
+				return $.extend(invest_status, {
 					investMoney: investMoney,
 					level: level,
 					profit: profit
-				};
+				});
+		};
+
+		var showSummary = function() {
+			$invest.hide();
+			$result.hide();
+	  		$summary.show();
+	  		playSumMoneyAnimation();
+
+	  		$("#name-confirm-btn").click(function() {
+	  			var name = $("#name-txt").val();
+	  			location.href = "result.html?u="+encodeURIComponent(name)+"&b="+invest_status.BASE_MONEY+"&r="+invest_status.ROUNDS;
+	  		});
+		};
+
+		var gameStart = function() {
+			$invest.hide();
+			$result.hide();
+			$summary.hide();
+
+			$("#lever-confirm-btn").click(function(){
+				level = $('input[name="lever-options"]:checked').val();
+				$("#lever").hide();
+				startNewRounds();
+			});
 		};
 
 		var showInvestResult = function() {
@@ -192,6 +253,7 @@
 			var result = calc(investMoney,leftMoney,level,dailyInfo.odds);
 			var profit = result - invest_status.BASE_MONEY;
 			profit = Math.round(profit*100)/100;
+			sumArray.push(profit);
 			invest_status.BASE_MONEY = result;
 
 			contentRefresh($result, resultTemplate, getResultJson(profit));
@@ -204,7 +266,8 @@
 		  		$("#next-confirm-btn").click(function(){
 		  			//real logic & do caculation
 				  	if(invest_status.ROUNDS >= MAX_ROUNDS){
-				  		location.href = ""; //redirect
+				  		//input your name
+				  		showSummary();
 				  	}
 				  	else {
 				  		++invest_status.ROUNDS;
@@ -214,7 +277,9 @@
 		  	});
 		};
 		//do animation
-		startNewRounds();
+		//deal with lever
+		gameStart();
+		
 		
 	});
 	

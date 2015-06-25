@@ -34,6 +34,30 @@
 		<title>投资风险大赛——投资选择</title>
 	</head>
 	<body>
+		<section id="lever" class="am-container">
+			<label>请选择你配资倍数</label>
+				<!-- 多选框 am-disabled -->
+				<div id="lever-btn-group" class="am-btn-group" data-am-button>
+					  <label class="am-btn am-btn-default am-btn-sm am-active">
+					    <input type="radio" name="lever-options" value="0" id="lever-option1"> 明智的不配资
+					  </label>
+					  <label class="am-btn am-btn-default am-btn-sm">
+					    <input type="radio" name="lever-options" value="1" id="lever-option2"> 配资1倍
+					  </label>
+					  <label class="am-btn am-btn-default am-btn-sm">
+					    <input type="radio" name="lever-options" value="2" id="lever-option3"> 配资2倍
+					  </label>
+					  <label class="am-btn am-btn-default am-btn-sm">
+					    <input type="radio" name="lever-options" value="3" id="lever-option4"> 配资3倍
+					  </label>
+					  <label class="am-btn am-btn-default am-btn-sm">
+					    <input type="radio" name="lever-options" value="4" id="lever-option5"> 配资4倍
+					  </label>
+
+				<input id="lever-confirm-btn" class="am-btn am-btn-primary" type="button" value="点击确认配资倍数，正式开始交易">
+			</div>
+		</section>
+
 		<section id="invest" class="am-container">
 			<!-- 这里是每天的新闻 -->
 			<section id="daily-info">
@@ -42,14 +66,14 @@
 				</header>
 
 				<div class="daily-info-event">
-					<p><blockquote>这个是第{{ROUNDS}}天的信息:{{news}}</blockquote></p>
+					<p><blockquote>第{{ROUNDS}}天信息要点:{{news}}</blockquote></p>
 					<!-- <img src="imgs/.....jpg" alt=""> -->
 				</div>
 			</section>
 			<!-- 这里是投资表单，可以选择本金投入，然后选择杠杆 -->
 			<section id="invest-form">
 				<div>您目前拥有本金{{BASE_MONEY}}</div>
-				<label>选择你投入本次交易的金额，准备投入<span id="invest-money">{{BASE_MONEY}}</span>，剩余本金<span id="left-money">0</span></label>
+				<label>交易决策：选择你投入本次交易的金额</label>
 				<!-- 这个选择本次投入的本金 -->
 				<div id="base-btn-group" class="am-btn-group" data-am-button>
 					  <label class="am-btn am-btn-default am-btn-sm">
@@ -62,40 +86,20 @@
 					    <input type="radio" name="base-options" value="3" id="base-option3"> 全部投入
 					  </label>
 				</div> 
+				<label>准备投入<span id="invest-money">{{BASE_MONEY}}</span>，剩余本金<span id="left-money">0</span></label>
 
-				<label>选择你准备给交易配资杠杆</label>
-				<!-- 多选框 am-disabled -->
-				<div id="lever-btn-group" class="am-btn-group" data-am-button>
-					  <label class="am-btn am-btn-default am-btn-sm am-active">
-					    <input type="radio" name="lever-options" value="0" id="lever-option1"> 无杠杆
-					  </label>
-					  <label class="am-btn am-btn-default am-btn-sm">
-					    <input type="radio" name="lever-options" value="1" id="lever-option2"> 1倍
-					  </label>
-					  <label class="am-btn am-btn-default am-btn-sm">
-					    <input type="radio" name="lever-options" value="2" id="lever-option3"> 2倍
-					  </label>
-					  <label class="am-btn am-btn-default am-btn-sm">
-					    <input type="radio" name="lever-options" value="3" id="lever-option4"> 3倍
-					  </label>
-					  <label class="am-btn am-btn-default am-btn-sm">
-					    <input type="radio" name="lever-options" value="4" id="lever-option5"> 4倍
-					  </label>
-				</div>
-
-				<input id="invest-confirm-btn" class="am-btn am-btn-primary" type="button" value="确认本轮投资">
+				<input id="invest-confirm-btn" class="am-btn am-btn-primary" type="button" value="确认本轮投资，完成挂单，赶去开会">
 			</section>
 		</section>
 
 
 		<section id="result" class="am-container">
-			<header class="daily-info-header am-u-sm-4 am-u-sm-centered">
+			<header class="daily-info-header am-u-sm-6 am-u-sm-centered">
 					<h2>第{{ROUNDS}}天战况</h2>
 			</header>
-			<div class="invest-info">你投入{{investMoney}}本金，加上{{level}}倍杠杆，。。。。</div>
-			<div class="invest-animation">股市动画效果</div>
+			<div class="invest-info">你投入{{investMoney}}本金，加上{{level}}倍杠杆</div>
 			<!-- am-badge am-badge-success am-radius -->
-			<div id="container" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
+			<div class="invest-animation" id="container" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
 			<div class="invest-result">本次交易
 			{{#compare profit 0}}
 				<span class="am-badge am-badge-danger am-radius">获利</span>
@@ -106,7 +110,14 @@
 			<div class="am-progress am-progress-striped am-progress-sm am-active">
 				<div id="result-progress-bar" class="am-progress-bar" style="width: 0%">0%</div>
 			</div>-->
-			<input id="next-confirm-btn" class="am-btn am-btn-primary" type="button" value="进入下一轮投资">
+			<input id="next-confirm-btn" class="am-btn am-btn-primary" type="button" value="进入下一轮投资，忐忑度过整晚">
+		</section>
+
+		<section id="summary" class="am-container">
+			<div id="summary-container"></div>
+			<label for="name-txt">请填入你的大名</label>
+			<input id="name-txt" name="name-txt" type="text">
+			<input id="name-confirm-btn" class="am-btn am-btn-primary" type="button" value="确认查看你的最终资产">
 		</section>
 		
 		<script type="text/javascript" src="assets/jquery.min.js"></script>
