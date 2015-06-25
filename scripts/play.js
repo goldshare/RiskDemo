@@ -1,5 +1,5 @@
 (function(){
-	var MAX_ROUNDS = 4;
+	var MAX_ROUNDS = 20;
 
 	var invest_status = { 
 		BASE_MONEY : 100000, //$ original 
