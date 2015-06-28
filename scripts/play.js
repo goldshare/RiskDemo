@@ -350,10 +350,10 @@
 	}
 
 	var no_calc = function(){
-		level = 0;
+		var no_level = 0;
 		if(no_invest_status.gallon > 0){        //加仓
 			var money = no_invest_status.leftMoney * no_invest_status.gallon; //加仓金额
-			var leverMoney = money * level;  //杠杆金额
+			var leverMoney = money * no_level;  //杠杆金额
 			no_invest_status.investMoney += money;
 			no_invest_status.leftMoney -= money;
 			no_invest_status.leverMoney += leverMoney;
@@ -378,8 +378,8 @@
 		}else if(no_invest_status.gallon <= 0){  //减仓或不变
 			var gallon = no_invest_status.gallon * (-1);
 			var money = no_invest_status.marketValue * gallon; //减仓金额
-			//invest_status.marketValue -= money; 
-			//invest_status.leftMoney += money;
+			var bStock = stockArray[0];  //开盘价
+			var eStock = stockArray[9];  //收盘价
 			var todayProfit = money * (bStock - 0.2)/100; 
 			var holdProfit = (no_invest_status.marketValue - money) *(eStock - 0.2)/100;
 			var profit = todayProfit + holdProfit;
