@@ -1,13 +1,18 @@
 (function(){
 	var MAX_ROUNDS = 20;
 
-	var invest_status = { 
-		BASE_MONEY : 100000, //$ original 
-		ROUNDS: 1
+	var invest_status = {
+		rounds: 1,
+		investMoney: ,
+		profit: ,
+		leftMoney:,
+		marketValue:,
+		profit:,
+		profitPercent:
+		leverMoney:,
+		base : 100000 //$ original 
 	};
 	
-	var investMoney=invest_status.BASE_MONEY;
-	var leftMoney=0;
 	var level=0;
 
 	var len=35;
@@ -38,20 +43,6 @@
 	         return options.inverse(this);
 	       }
 	     });
-		//firstly loads daily info into 
-		var _getDailyInfo = function(callback) {
-			var jqxhr = $.getJSON( "example.json")
-			.success(function(data) {
-			  	// console.log( "success" );
-			  	dailyInfo = $.extend({}, data, invest_status);
-			})
-			.fail(function() {
-				// console.log( "error" );
-				dailyInfo = $.extend({}, invest_status);
-			});
-
-			jqxhr.complete(callback);
-		};
 
 		var getDailyInfo = function(callback){
 			var day = getRandom();
@@ -73,10 +64,10 @@
 			});
 
 			$('[name="base-options"]').on("change", function() {
-				investMoney = invest_status.BASE_MONEY * $(this).val() / 3;
+				investMoney = invest_status.base * $(this).val() / 3;
 				investMoney = Math.round(investMoney*100)/100;
 				$("#invest-money").html(investMoney);
-				leftMoney = invest_status.BASE_MONEY - investMoney;
+				leftMoney = invest_status.base - investMoney;
 				$("#left-money").html(leftMoney);
 			});
 			
@@ -85,7 +76,7 @@
 
 		var startNewRounds = function() {
 			//loading animation
-			investMoney = invest_status.BASE_MONEY;
+			investMoney = invest_status.base;
 			leftMoney = 0;
 			//level = 0;
 			var callback = function() {
@@ -186,37 +177,6 @@
 		    });
 		};
 
-		/*var showProgressBar = function() {
-			var $progressBar = $('#result-progress-bar');
-			    var current_perc = 0;
-			    var deferred = $.Deferred();
-				var promise = deferred.promise();
-
-				var timer = setInterval( function () {
-				    if (current_perc > 100) {
-		                deferred.resolve();
-		            } else {
-		                current_perc += 1;
-		                $progressBar.css('width', (current_perc)+'%');
-		            }
-
-		            $progressBar.text((current_perc)+'%');
-				}, 50);
-
-				promise.done(function () {
-				    clearInterval( timer );
-				    //real logic & do caculation
-				  	++invest_status.ROUNDS;
-				  	if(invest_status.ROUNDS >= MAX_ROUNDS){
-				  		location.ref = ""; //redirect
-				  	}
-				  	else {
-				  		$progressBar.css('width', '0%');
-						startNewRounds();
-				  	}
-				});
-		}*/
-
 		var getResultJson = function(profit) {
 				return $.extend(invest_status, {
 					investMoney: investMoney,
@@ -233,7 +193,7 @@
 
 	  		$("#name-confirm-btn").click(function() {
 	  			var name = $("#name-txt").val();
-	  			location.href = "result.html?u="+encodeURIComponent(name)+"&b="+invest_status.BASE_MONEY+"&r="+invest_status.ROUNDS;
+	  			location.href = "result.html?u="+encodeURIComponent(name)+"&b="+invest_status.base+"&r="+invest_status.rounds;
 	  		});
 		};
 
@@ -252,10 +212,10 @@
 		var showInvestResult = function() {
 			$invest.fadeOut();
 			var result = calc(investMoney,leftMoney,level,dailyInfo.odds);
-			var profit = result - invest_status.BASE_MONEY;
+			var profit = result - invest_status.base;
 			profit = Math.round(profit*100)/100;
 			sumArray.push(profit);
-			invest_status.BASE_MONEY = result;
+			invest_status.base = result;
 
 			contentRefresh($result, resultTemplate, getResultJson(profit));
 
@@ -266,12 +226,12 @@
 		  		//showProgressBar();
 		  		$("#next-confirm-btn").click(function(){
 		  			//real logic & do caculation
-				  	if(invest_status.ROUNDS >= MAX_ROUNDS){
+				  	if(invest_status.rounds >= MAX_ROUNDS){
 				  		//input your name
 				  		showSummary();
 				  	}
 				  	else {
-				  		++invest_status.ROUNDS;
+				  		++invest_status.rounds;
 						startNewRounds();
 				  	}
 		  		});

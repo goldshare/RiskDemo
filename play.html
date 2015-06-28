@@ -72,13 +72,13 @@
 					<p>第{{ROUNDS}}天</p>
 				</header>
 				<ul id="invest-info" class="am-list am-list-static">
-				<li>持仓成本：			0</li>
-				<li>借入资金：			20000</li>
-				<li>持仓市值：			0</li>
+					<li>持仓成本：	<span id="left-money">{{investMoney}}</span></li>
+					<li>借入资金：	<span id="left-money">{{leverMoney}}</span></li>
+					<li>持仓市值：	<span id="left-money">{{marketValue}}</span></li>
 
-				<li>账面盈利：			0，0%</li>
-				<li>可用资金：			<span id="left-money">100000</span></li>
-				<li>总资产：			<span id="invest-money">{{BASE_MONEY}}</span></li>
+					<li>账面盈利：	<span id="left-money">{{profit}}，{{profitPercent}}</span></li>
+					<li>可用资金：	<span id="left-money">{{leftMoney}}</span></li>
+					<li>总资产：	<span id="invest-money">{{base}}</span></li>
 				</ul>
 
 				<div class="daily-info-event">
