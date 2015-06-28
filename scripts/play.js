@@ -304,15 +304,19 @@
 			profit = Math.round(profit*100)/100;
 			leverSumArray.push(profit);
 			invest_status.marketValue += profit + money + leverMoney;
-			var profitPercent = invest_status.profit/invest_status.investMoney;
-			profitPercent = Math.round(profitPercent*1000)/1000;
-			invest_status.profitPercent = profitPercent * 100;
+			if(invest_status.investMoney != 0){
+				var profitPercent = invest_status.profit/invest_status.investMoney;
+				profitPercent = Math.round(profitPercent*1000)/1000;
+				invest_status.profitPercent = profitPercent * 100;
+			}else{
+				invest_status.profitPercent = 0;
+			}
 			invest_status.base = invest_status.marketValue + invest_status.leftMoney - invest_status.leverMoney;
 		}else if(invest_status.gallon <= 0){  //减仓或不变
 			var gallon = invest_status.gallon * (-1);
 			var money = invest_status.marketValue * gallon; //减仓金额
-			//invest_status.marketValue -= money; 
-			//invest_status.leftMoney += money;
+			var bStock = stockArray[0];  //开盘价
+			var eStock = stockArray[9];  //收盘价
 			var todayProfit = money * (bStock - 0.2)/100; 
 			var holdProfit = (invest_status.marketValue - money) *(eStock - 0.2)/100;
 			var profit = todayProfit + holdProfit;
@@ -321,9 +325,13 @@
 			leverSumArray.push(profit);
 			invest_status.marketValue = invest_status.marketValue - money + profit;
 			invest_status.leftMoney += money + todayProfit;
-			var profitPercent = invest_status.profit/invest_status.investMoney;
-			profitPercent = Math.round(profitPercent*1000)/1000;
-			invest_status.profitPercent = profitPercent * 100;
+			if(invest_status.investMoney != 0){
+				var profitPercent = invest_status.profit/invest_status.investMoney;
+				profitPercent = Math.round(profitPercent*1000)/1000;
+				invest_status.profitPercent = profitPercent * 100;
+			}else{
+				invest_status.profitPercent = 0;
+			}
 			invest_status.base = invest_status.marketValue + invest_status.leftMoney - invest_status.leverMoney;
 		}
 		invest_status.investMoney = Math.round(invest_status.investMoney*100)/100;
@@ -359,9 +367,13 @@
 			profit = Math.round(profit*100)/100;
 			sumArray.push(profit);
 			no_invest_status.marketValue += profit + money + leverMoney;
-			var profitPercent = no_invest_status.profit/no_invest_status.investMoney;
-			profitPercent = Math.round(profitPercent*1000)/1000;
-			no_invest_status.profitPercent = profitPercent * 100;
+			if(no_invest_status.investMoney != 0){
+				var profitPercent = no_invest_status.profit/no_invest_status.investMoney;
+				profitPercent = Math.round(profitPercent*1000)/1000;
+				no_invest_status.profitPercent = profitPercent * 100;
+			}else{
+				no_invest_status.profitPercent = 0;
+			}
 			no_invest_status.base = no_invest_status.marketValue + no_invest_status.leftMoney - no_invest_status.leverMoney;
 		}else if(no_invest_status.gallon <= 0){  //减仓或不变
 			var gallon = no_invest_status.gallon * (-1);
@@ -376,9 +388,13 @@
 			sumArray.push(profit);
 			no_invest_status.marketValue = no_invest_status.marketValue - money + profit;
 			no_invest_status.leftMoney += money + todayProfit;
-			var profitPercent = no_invest_status.profit/no_invest_status.investMoney;
-			profitPercent = Math.round(profitPercent*1000)/1000;
-			no_invest_status.profitPercent = profitPercent * 100;
+			if(no_invest_status.investMoney != 0){
+				var profitPercent = no_invest_status.profit/no_invest_status.investMoney;
+				profitPercent = Math.round(profitPercent*1000)/1000;
+				no_invest_status.profitPercent = profitPercent * 100;
+			}else{
+				no_invest_status.profitPercent = 0;
+			}
 			no_invest_status.base = no_invest_status.marketValue + no_invest_status.leftMoney - no_invest_status.leverMoney;
 		}
 		no_invest_status.investMoney = Math.round(no_invest_status.investMoney*100)/100;
