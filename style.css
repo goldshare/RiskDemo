@@ -1,3 +1,62 @@
+/*
+ * global
+ *
+ */
+#content {
+  min-height: 300px;
+}
+/*
+ * index.html
+ *
+ */
+#game p {
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+}
+/*
+ * play.html
+ *
+ */
+#lever {
+  margin-top: 10px;
+}
+/* hack for btn-group-stacked */
+#lever-btn-group {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#lever-btn-group>.am-btn {
+  display: block;
+  float: none;
+  width: 100%;
+  max-width: 100%;
+}
+
+#lever-confirm-btn, 
+#invest-confirm-btn {
+  margin-top: 20px;
+}
+#invest-info {
+  margin: 10px !important;
+}
+#invest-info li {
+  border: none !important;
+  padding: 0 !important;
+  
+}
+/*
+ * result.html
+ *
+ */
+html,body{ height:100% } 
+#info {
+  margin-top: 40px;
+}
+#last-result {
+  color: #c82829;
+}
 #shareit {
   -webkit-user-select: none;
   display: none;

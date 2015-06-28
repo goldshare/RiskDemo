@@ -1,22 +1,48 @@
 (function(){
-	var MAX_ROUNDS = 20;
+	var MAX_ROUNDS = 10;
 
-	var invest_status = { 
-		BASE_MONEY : 100000, //$ original 
-		ROUNDS: 1
+	var no_invest_status = {
+		rounds: 1,
+		gallon: 0,
+		investMoney: 0,
+		leftMoney: 100000,
+		marketValue: 0,
+		profit: 0,
+		profitPercent: 0,
+		leverMoney: 0,
+		base : 100000 //$ original 
+	};
+
+	var invest_status = {
+		rounds: 1,
+		gallon: 0,
+		investMoney: 0,
+		leftMoney: 100000,
+		marketValue: 0,
+		profit: 0,
+		profitPercent: 0,
+		leverMoney: 0,
+		base : 100000 //$ original 
 	};
 	
-	var investMoney=invest_status.BASE_MONEY;
-	var leftMoney=0;
-	var level=0;
+	var level = 0;
+	var stateCode = {
+		fail: 0,
+		ok: 1,
+		good: 2
+	};
 
+	var len=35;
 	var originalArray=[];//原数组
-	for (var i=0;i<MAX_ROUNDS;i++)
+	for (var i=0;i<len;i++)
 	{ 
 		originalArray[i]= i; 
 	} 
 
-	var sumArray=[];  //统计每天盈亏情况
+	var sumArray=[];       //统计每天盈亏情况
+	var leverSumArray=[];  //统计每天加杠杆盈亏情况
+
+	var stockArray=[];  //每天的股票涨跌幅
 
 	$(document).ready(function() {
 		//get compiled template function
@@ -37,20 +63,6 @@
 	         return options.inverse(this);
 	       }
 	     });
-		//firstly loads daily info into 
-		var _getDailyInfo = function(callback) {
-			var jqxhr = $.getJSON( "example.json")
-			.success(function(data) {
-			  	// console.log( "success" );
-			  	dailyInfo = $.extend({}, data, invest_status);
-			})
-			.fail(function() {
-				// console.log( "error" );
-				dailyInfo = $.extend({}, invest_status);
-			});
-
-			jqxhr.complete(callback);
-		};
 
 		var getDailyInfo = function(callback){
 			var day = getRandom();
@@ -72,11 +84,12 @@
 			});
 
 			$('[name="base-options"]').on("change", function() {
-				investMoney = invest_status.BASE_MONEY * $(this).val() / 3;
-				investMoney = Math.round(investMoney*100)/100;
-				$("#invest-money").html(investMoney);
-				leftMoney = invest_status.BASE_MONEY - investMoney;
-				$("#left-money").html(leftMoney);
+				var option = $(this).val();
+				var options = [0.25, 0.5, 0.75, 1, -0.25, -0.5, -0.75, -1, 0]; //TODO: can use data attr
+				invest_status.gallon = options[option - 1];
+				no_invest_status.gallon = invest_status.gallon;
+				//$("#invest-money").html(investMoney);
+				//$("#left-money").html(invest_status.leftMoney);
 			});
 			
 		}
@@ -84,14 +97,10 @@
 
 		var startNewRounds = function() {
 			//loading animation
-			investMoney = invest_status.BASE_MONEY;
-			leftMoney = 0;
-			//level = 0;
-			var callback = function() {
-				
-			}
+			
 			//get info
 			getDailyInfo(function() {
+				stockArray = getStockPoint(dailyInfo.odds);
 				contentRefresh($invest, investTemplate, dailyInfo);
 				$result.hide();
 				$invest.show();
@@ -136,7 +145,7 @@
 		        },
 		        series: [{
 		            name: '实时股价',
-		            data: getStockPoint(dailyInfo.odds)
+		            data: stockArray
 		        }],
 		        credits: {
      				enabled: false
@@ -148,8 +157,10 @@
 			var numArray=[];
 			for(var i=0;i < sumArray.length;i++){
 				var numStr = "第"+(i+1)+"天";
-				numArray.push(numStr)
+				numArray.push(numStr);
 			}
+			//console.log('sumArray:'+sumArray);
+			//console.log('leversumArray:'+leverSumArray);
 			$('#summary-container').highcharts({
 		        title: {
 		            text: '我的盈亏',
@@ -169,15 +180,18 @@
 		            }]
 		        },
 		        legend: {
-		            layout: 'vertical',
-		            align: 'right',
-		            verticalAlign: 'middle',
-		            enabled: false,
+		            //layout: 'vertical',
+		            align: 'center', //水平方向位置
+                    verticalAlign: 'bottom', //垂直方向位置
+		            enabled: true,
 		            borderWidth: 0
 		        },
 		        series: [{
-		            name: '金额',
+		            name: '没加杠杆',
 		            data: sumArray
+		        },{
+		            name: '加杠杆',
+		            data: leverSumArray
 		        }],
 		        credits: {
      				enabled: false
@@ -185,54 +199,27 @@
 		    });
 		};
 
-		/*var showProgressBar = function() {
-			var $progressBar = $('#result-progress-bar');
-			    var current_perc = 0;
-			    var deferred = $.Deferred();
-				var promise = deferred.promise();
-
-				var timer = setInterval( function () {
-				    if (current_perc > 100) {
-		                deferred.resolve();
-		            } else {
-		                current_perc += 1;
-		                $progressBar.css('width', (current_perc)+'%');
-		            }
-
-		            $progressBar.text((current_perc)+'%');
-				}, 50);
-
-				promise.done(function () {
-				    clearInterval( timer );
-				    //real logic & do caculation
-				  	++invest_status.ROUNDS;
-				  	if(invest_status.ROUNDS >= MAX_ROUNDS){
-				  		location.ref = ""; //redirect
-				  	}
-				  	else {
-				  		$progressBar.css('width', '0%');
-						startNewRounds();
-				  	}
-				});
-		}*/
-
-		var getResultJson = function(profit) {
-				return $.extend(invest_status, {
-					investMoney: investMoney,
-					level: level,
-					profit: profit
-				});
-		};
-
-		var showSummary = function() {
+		var showSummary = function(state) {
 			$invest.hide();
 			$result.hide();
+			var $summaryInfo = $("#summary-info");
+			switch(state) {
+				case stateCode.fail:
+					$summaryInfo.html("本想迈上人生巅峰，结果登上天台。跳下去才发现，楼下已经堆满了人。如果当初不轻信消息，不上杠杆，也许还有机会");
+					break;
+				case stateCode.ok:
+					$summaryInfo.html("经过这一个月洗礼含笑迈上人生巅峰");
+					break;
+				case stateCode.good:
+					$summaryInfo.html("经过这一个月洗礼悲喜交加，人生疯癫");
+					break;
+			}
 	  		$summary.show();
 	  		playSumMoneyAnimation();
 
 	  		$("#name-confirm-btn").click(function() {
 	  			var name = $("#name-txt").val();
-	  			location.href = "result.html?u="+encodeURIComponent(name)+"&b="+invest_status.BASE_MONEY+"&r="+invest_status.ROUNDS;
+	  			location.href = "result.html?u="+encodeURIComponent(name)+"&b="+invest_status.profit+"&r="+invest_status.rounds;
 	  		});
 		};
 
@@ -249,14 +236,28 @@
 		};
 
 		var showInvestResult = function() {
+			var state = -1;
 			$invest.fadeOut();
-			var result = calc(investMoney,leftMoney,level,dailyInfo.odds);
-			var profit = result - invest_status.BASE_MONEY;
-			profit = Math.round(profit*100)/100;
-			sumArray.push(profit);
-			invest_status.BASE_MONEY = result;
+			//real logic & do caculation
+			calc();
+			no_calc();
+			contentRefresh($result, resultTemplate, invest_status);
 
-			contentRefresh($result, resultTemplate, getResultJson(profit));
+			if(invest_status.base <= 0) {
+				state = stateCode.fail;
+				$("#next-confirm-btn").val("保证金不足，被强制平仓，点击继续");
+			}
+
+		  	if(invest_status.rounds >= MAX_ROUNDS) {
+		  		if(invest_status.base > 10000) {
+		  			state = stateCode.good;
+		  			$("#next-confirm-btn").val("经过这一个月洗礼含笑迈上人生巅峰，查看结果");
+		  		}
+		  		else {
+		  			state = stateCode.ok;
+		  			$("#next-confirm-btn").val("悲喜交加，人生疯癫，查看结果");
+		  		}
+		  	}
 
 		  	$result.fadeIn(function() {
 		  		//play animations
@@ -264,13 +265,10 @@
 		  		//progress bar animation
 		  		//showProgressBar();
 		  		$("#next-confirm-btn").click(function(){
-		  			//real logic & do caculation
-				  	if(invest_status.ROUNDS >= MAX_ROUNDS){
-				  		//input your name
-				  		showSummary();
-				  	}
-				  	else {
-				  		++invest_status.ROUNDS;
+		  			if(state >= 0) {
+		  				showSummary(state);
+		  			} else {
+				  		++invest_status.rounds;
 						startNewRounds();
 				  	}
 		  		});
@@ -279,28 +277,118 @@
 		//do animation
 		//deal with lever
 		gameStart();
-		
-		
 	});
 	
-	/*calc:计算盈利
-	 *investMoney:投入金额
-	 *leftMoney:剩余金额
-	 *level:杠杆倍数
-	 *odds:涨跌幅(如2.5、-3.5)
-	 */
-	var calc = function(investMoney,leftMoney,level,odds)
-	{
-		var principal = investMoney;          //本金
-		var levelMoney = principal*level;     //杠杆金额 
-		var interestRate = 0.0015 + 0.003*2;  //每天利息利率
-		var interestMoney = levelMoney*interestRate; //利息
-		var earnMoney = (principal + levelMoney)*odds/100;
-		var leftInvestMoney = principal + earnMoney - interestMoney + leftMoney;
-		leftInvestMoney = Math.round(leftInvestMoney*100)/100;
-		return leftInvestMoney;
+
+	/*---------------------------计算相关的方法---------------------------------*/
+	var calc = function(){
+		/*console.log('level:'+level);
+		console.log('invest_status.investMoney:'+invest_status.investMoney);
+		console.log('invest_status.leverMoney:'+invest_status.leverMoney);
+		console.log('invest_status.profit:'+invest_status.profit);
+		console.log('invest_status.marketValue:'+invest_status.marketValue);
+		console.log('invest_status.base:'+invest_status.base);*/
+		if(invest_status.gallon > 0){        //加仓
+			var money = invest_status.leftMoney * invest_status.gallon; //加仓金额
+			var leverMoney = money * level;  //杠杆金额
+			invest_status.investMoney += money;
+			invest_status.leftMoney -= money;
+			invest_status.leverMoney += leverMoney;
+			var bStock = stockArray[0];  //开盘价
+			var eStock = stockArray[9];  //收盘价
+			//计算今天的利润
+			var todayProfit = (money + leverMoney)*(eStock - bStock - 0.2)/100;
+			var holdProfit = invest_status.marketValue *(eStock - 0.2)/100;
+			var profit = todayProfit + holdProfit;
+			invest_status.profit += profit;
+			profit = Math.round(profit*100)/100;
+			leverSumArray.push(profit);
+			invest_status.marketValue += profit + money + leverMoney;
+			var profitPercent = invest_status.profit/invest_status.investMoney;
+			profitPercent = Math.round(profitPercent*1000)/1000;
+			invest_status.profitPercent = profitPercent * 100;
+			invest_status.base = invest_status.marketValue + invest_status.leftMoney - invest_status.leverMoney;
+		}else if(invest_status.gallon <= 0){  //减仓或不变
+			var gallon = invest_status.gallon * (-1);
+			var money = invest_status.marketValue * gallon; //减仓金额
+			//invest_status.marketValue -= money; 
+			//invest_status.leftMoney += money;
+			var todayProfit = money * (bStock - 0.2)/100; 
+			var holdProfit = (invest_status.marketValue - money) *(eStock - 0.2)/100;
+			var profit = todayProfit + holdProfit;
+			invest_status.profit += profit;
+			profit = Math.round(profit*100)/100;
+			leverSumArray.push(profit);
+			invest_status.marketValue = invest_status.marketValue - money + profit;
+			invest_status.leftMoney += money + todayProfit;
+			var profitPercent = invest_status.profit/invest_status.investMoney;
+			profitPercent = Math.round(profitPercent*1000)/1000;
+			invest_status.profitPercent = profitPercent * 100;
+			invest_status.base = invest_status.marketValue + invest_status.leftMoney - invest_status.leverMoney;
+		}
+		invest_status.investMoney = Math.round(invest_status.investMoney*100)/100;
+		invest_status.leftMoney = Math.round(invest_status.leftMoney*100)/100;
+		invest_status.leverMoney = Math.round(invest_status.leverMoney*100)/100;
+		invest_status.profit = Math.round(invest_status.profit*100)/100;
+		invest_status.marketValue = Math.round(invest_status.marketValue*100)/100;
+		invest_status.profitPercent = Math.round(invest_status.profitPercent*100)/100;
+		invest_status.base = Math.round(invest_status.base*100)/100;
+		console.log('level:'+level);
+		console.log('invest_status.investMoney:'+invest_status.investMoney);
+		console.log('invest_status.leverMoney:'+invest_status.leverMoney);
+		console.log('invest_status.profit:'+invest_status.profit);
+		console.log('invest_status.marketValue:'+invest_status.marketValue);
+		console.log('invest_status.base:'+invest_status.base);
 	}
 
+	var no_calc = function(){
+		level = 0;
+		if(no_invest_status.gallon > 0){        //加仓
+			var money = no_invest_status.leftMoney * no_invest_status.gallon; //加仓金额
+			var leverMoney = money * level;  //杠杆金额
+			no_invest_status.investMoney += money;
+			no_invest_status.leftMoney -= money;
+			no_invest_status.leverMoney += leverMoney;
+			var bStock = stockArray[0];  //开盘价
+			var eStock = stockArray[9];  //收盘价
+			//计算今天的利润
+			var todayProfit = (money + leverMoney)*(eStock - bStock - 0.2)/100;
+			var holdProfit = no_invest_status.marketValue *(eStock - 0.2)/100;
+			var profit = todayProfit + holdProfit;
+			no_invest_status.profit += profit;
+			profit = Math.round(profit*100)/100;
+			sumArray.push(profit);
+			no_invest_status.marketValue += profit + money + leverMoney;
+			var profitPercent = no_invest_status.profit/no_invest_status.investMoney;
+			profitPercent = Math.round(profitPercent*1000)/1000;
+			no_invest_status.profitPercent = profitPercent * 100;
+			no_invest_status.base = no_invest_status.marketValue + no_invest_status.leftMoney - no_invest_status.leverMoney;
+		}else if(no_invest_status.gallon <= 0){  //减仓或不变
+			var gallon = no_invest_status.gallon * (-1);
+			var money = no_invest_status.marketValue * gallon; //减仓金额
+			//invest_status.marketValue -= money; 
+			//invest_status.leftMoney += money;
+			var todayProfit = money * (bStock - 0.2)/100; 
+			var holdProfit = (no_invest_status.marketValue - money) *(eStock - 0.2)/100;
+			var profit = todayProfit + holdProfit;
+			no_invest_status.profit += profit;
+			profit = Math.round(profit*100)/100;
+			sumArray.push(profit);
+			no_invest_status.marketValue = no_invest_status.marketValue - money + profit;
+			no_invest_status.leftMoney += money + todayProfit;
+			var profitPercent = no_invest_status.profit/no_invest_status.investMoney;
+			profitPercent = Math.round(profitPercent*1000)/1000;
+			no_invest_status.profitPercent = profitPercent * 100;
+			no_invest_status.base = no_invest_status.marketValue + no_invest_status.leftMoney - no_invest_status.leverMoney;
+		}
+		no_invest_status.investMoney = Math.round(no_invest_status.investMoney*100)/100;
+		no_invest_status.leftMoney = Math.round(no_invest_status.leftMoney*100)/100;
+		no_invest_status.leverMoney = Math.round(no_invest_status.leverMoney*100)/100;
+		no_invest_status.profit = Math.round(no_invest_status.profit*100)/100;
+		no_invest_status.marketValue = Math.round(no_invest_status.marketValue*100)/100;
+		no_invest_status.profitPercent = Math.round(no_invest_status.profitPercent*100)/100;
+		no_invest_status.base = Math.round(no_invest_status.base*100)/100;
+	}
 	/*getRandom:获取不重复的随机值
 	 *返回值范围：0-（MAX_ROUNDS-1）
 	 */
@@ -310,6 +398,27 @@
 		var value = originalArray[parseInt(index)];
 		originalArray.splice(index,1);
 		return value;
+	}
+
+    /*getRandomByValue:根据输入的值生成一个振幅[-2,2]的随机数
+	 *返回值范围：[odds-2,odds+2]
+	 *当返回值>10时，返回10
+	 *当返回值<10时，返回-10
+	 */
+	var getRandomByValue = function(odds){
+		var scope = 2;           //最大涨幅
+		var hscope = scope * 2;  //最大涨幅的2倍
+		var value=Math.round((Math.random()*hscope - scope)*100)/100;
+		while(value == 0){
+			value=Math.round((Math.random()*hscope - scope)*100)/100;
+		}
+		var result = odds + value;
+		console.log(value)
+		if(result > 10)
+			result = 10;
+		if(result < -10)
+			result = -10;
+		return result;
 	}
 
     /*getStockPoint:获取股票振幅
@@ -322,12 +431,14 @@
 		var n = 10;
 		var high = 10;
 		var lower = -10;
-		for (var i=0;i<n-1;i++)
+		resultArray[0] = odds;
+		for (var i=1;i<n;i++)
 		{ 
-			var value=Math.round((Math.random()*((high - lower +1) + lower))*100)/100;  
-			resultArray[i]= value; 
+			var value = getRandomByValue(odds); 
+			value=Math.round(value*100)/100; 
+			resultArray[i] = value; 
+			odds = value;
 		} 
-		resultArray[n-1]= odds;
 		return resultArray;
 	}
 
