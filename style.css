@@ -42,9 +42,12 @@
  * result.html
  *
  */
-
-#score {
-  
+html,body{ height:100% } 
+#info {
+  margin-top: 40px;
+}
+#last-result {
+  color: #c82829;
 }
 #shareit {
   -webkit-user-select: none;

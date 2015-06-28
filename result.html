@@ -34,23 +34,20 @@
 		<title></title>
 	</head>
 	<body>
-		<article>
-			<header><h1></h1></header>
+		<article class="am-article am-container">
+			<header><h1 id="info"></h1></header>
 			<div id="content">
-				<p id="info">我的最终资产为<label id="score">10000</label></p>
+				<p id="last-result">我的最终资产为<label id="score">10000</label></p>
 				<p><label id="user-name"></label>在这个变态模拟盘游戏中撑过了<label id="rounds">m</label>轮, 不服来战！</p>
 				<p><input id="share-confirm-btn" class="am-btn am-btn-secondary" type="button" value="分享">
 				<input id="game-confirm-btn" class="am-btn am-btn-primary" type="button" value="我要挑战！"></p>
 			</div>
-
-			<footer>
-				<div id="shareit"> 
-				  <img class="arrow" width="100px" height="100px" src="assets/img/share-it.png"> 
-				  <div id="share-text"><font color="white">点击右上角选择【发送到好友】或<br>【分享到朋友圈】邀请好友一起玩</font>
-				  </div>
-				</div>
-			</footer>
 		</article>
+		<div id="shareit"> 
+			  <img class="arrow" width="100px" height="100px" src="assets/img/share-it.png"> 
+			  <div id="share-text"><font color="white">点击右上角选择【发送到好友】或<br>【分享到朋友圈】邀请好友一起玩</font>
+			  </div>
+		</div>
 
 		<script type="text/javascript" src="assets/jquery.min.js"></script>
 		<script type="text/javascript">
@@ -68,6 +65,16 @@
 				$("#user-name").html(user);
 				$("#rounds").html(rounds);
 				$("#score").html(score);
+
+				document.title = user + '最终资产为' + score + '，在这个变态模拟盘游戏中撑过了' + rounds + '轮, 不服来战！';
+
+				if(score < 0){
+					$("#info").html("本想迈上人生巅峰，结果登上天台。跳下去才发现，楼下已经堆满了人");
+				} else if(score > 10000) {
+					$("#info").html("经过这一个月洗礼含笑迈上人生巅峰");
+				} else{
+					$("#info").html("经过这一个月洗礼悲喜交加，人生疯癫");
+				}
 
 				//立即分享到微信朋友圈点击事件
 				$("#share-confirm-btn").on("click", function() {

@@ -193,7 +193,7 @@
 			var $summaryInfo = $("#summary-info");
 			switch(state) {
 				case stateCode.fail:
-					$summaryInfo.html("本想迈上人生巅峰，结果登上天台。跳下去才发现，楼下已经堆满了人如果当初不轻信消息，不上杠杆，也许还有机会");
+					$summaryInfo.html("本想迈上人生巅峰，结果登上天台。跳下去才发现，楼下已经堆满了人。如果当初不轻信消息，不上杠杆，也许还有机会");
 					break;
 				case stateCode.ok:
 					$summaryInfo.html("经过这一个月洗礼含笑迈上人生巅峰");
@@ -236,7 +236,7 @@
 			}
 
 		  	if(invest_status.rounds >= MAX_ROUNDS) {
-		  		if(invest_status.profitPercent > 1) {
+		  		if(invest_status.base > 10000) {
 		  			state = stateCode.good;
 		  			$("#next-confirm-btn").val("经过这一个月洗礼含笑迈上人生巅峰，查看结果");
 		  		}
