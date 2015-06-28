@@ -69,16 +69,16 @@
 			<!-- 这里是每天的新闻 -->
 			<section id="daily-info">
 				<header class="daily-info-header">
-					<p>第{{ROUNDS}}天</p>
+					<p>第{{rounds}}天</p>
 				</header>
 				<ul id="invest-info" class="am-list am-list-static">
-					<li>持仓成本：	<span id="left-money">{{investMoney}}</span></li>
-					<li>借入资金：	<span id="left-money">{{leverMoney}}</span></li>
-					<li>持仓市值：	<span id="left-money">{{marketValue}}</span></li>
+					<li>持仓成本：	<span id="invest-money">{{investMoney}}</span></li>
+					<li>借入资金：	<span id="lever-money">{{leverMoney}}</span></li>
+					<li>持仓市值：	<span id="market-value">{{marketValue}}</span></li>
 
-					<li>账面盈利：	<span id="left-money">{{profit}}，{{profitPercent}}</span></li>
+					<li>账面盈利：	<span id="profit">{{profit}}，{{profitPercent}}</span></li>
 					<li>可用资金：	<span id="left-money">{{leftMoney}}</span></li>
-					<li>总资产：	<span id="invest-money">{{base}}</span></li>
+					<li>总资产：	<span id="base">{{base}}</span></li>
 				</ul>
 
 				<div class="daily-info-event">
@@ -129,20 +129,30 @@
 
 		<section id="result" class="am-container">
 			<header class="daily-info-header">
-					<p>第{{ROUNDS}}天</p>
+					<p>第{{rounds}}天</p>
 			</header>
 			<div class="invest-animation" id="container" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
-			<div class="invest-info">你投入{{investMoney}}本金，加上{{level}}倍杠杆</div>
+			<ul id="invest-info" class="am-list am-list-static">
+					<li>持仓成本：	<span>{{investMoney}}</span></li>
+					<li>借入资金：	<span>{{leverMoney}}</span></li>
+					<li>持仓市值：	<span>{{marketValue}}</span></li>
+
+					<li>账面盈利：	<span>{{profit}}，{{profitPercent}}</span></li>
+					<li>可用资金：	<span>{{leftMoney}}</span></li>
+					<li>总资产：	<span>{{base}}</span></li>
+			</ul>
 			<!-- am-badge am-badge-success am-radius -->
 			
 			<input id="next-confirm-btn" class="am-btn am-btn-primary" type="button" value="进入下一轮投资，忐忑度过整晚">
 		</section>
 
 		<section id="summary" class="am-container">
+			<p id="summary-info"></p>
 			<div id="summary-container"></div>
-			<label for="name-txt">请填入你的大名</label>
-			<input id="name-txt" name="name-txt" type="text">
-			<input id="name-confirm-btn" class="am-btn am-btn-primary" type="button" value="确认查看你的最终资产">
+			<div class="am-form-group am-form-group-sm">
+				<label for="name-txt" class="am-form-label">请填入你的大名</label><input id="name-txt" name="name-txt" type="text">
+				<input id="name-confirm-btn" class="am-btn am-btn-primary" type="button" value="输入后，点击查看您的最终资产">
+			</div>
 		</section>
 		
 		<script type="text/javascript" src="assets/jquery.min.js"></script>

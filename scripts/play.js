@@ -1,19 +1,26 @@
 (function(){
-	var MAX_ROUNDS = 20;
+	var MAX_ROUNDS = 10;
 
 	var invest_status = {
 		rounds: 1,
-		investMoney: ,
-		profit: ,
-		leftMoney:,
-		marketValue:,
-		profit:,
-		profitPercent:
-		leverMoney:,
+		gallon: 0,
+
+		investMoney: 0,
+		profit: 0,
+		leftMoney: 100000,
+		marketValue: 0,
+		profit: 0,
+		profitPercent: 0,
+		leverMoney: 0,
 		base : 100000 //$ original 
 	};
 	
-	var level=0;
+	var level = 0;
+	var stateCode = {
+		fail: 0,
+		ok: 1,
+		good: 2
+	};
 
 	var len=35;
 	var originalArray=[];//原数组
@@ -64,11 +71,12 @@
 			});
 
 			$('[name="base-options"]').on("change", function() {
-				investMoney = invest_status.base * $(this).val() / 3;
-				investMoney = Math.round(investMoney*100)/100;
-				$("#invest-money").html(investMoney);
-				leftMoney = invest_status.base - investMoney;
-				$("#left-money").html(leftMoney);
+				var option = $(this).val();
+				var options = [0.25, 0.5, 0.75, 1, -0.25, -0.5, -0.75, -1, 0]; //TODO: can use data attr
+				invest_status.gallon = options[option - 1];
+
+				//$("#invest-money").html(investMoney);
+				//$("#left-money").html(invest_status.leftMoney);
 			});
 			
 		}
@@ -177,17 +185,21 @@
 		    });
 		};
 
-		var getResultJson = function(profit) {
-				return $.extend(invest_status, {
-					investMoney: investMoney,
-					level: level,
-					profit: profit
-				});
-		};
-
-		var showSummary = function() {
+		var showSummary = function(state) {
 			$invest.hide();
 			$result.hide();
+			var $summaryInfo = $("#summary-info");
+			switch(state) {
+				case stateCode.fail:
+					$summaryInfo.html("本想迈上人生巅峰，结果登上天台。跳下去才发现，楼下已经堆满了人如果当初不轻信消息，不上杠杆，也许还有机会");
+					break;
+				case stateCode.ok:
+					$summaryInfo.html("经过这一个月洗礼含笑迈上人生巅峰");
+					break;
+				case stateCode.good:
+					$summaryInfo.html("经过这一个月洗礼悲喜交加，人生疯癫");
+					break;
+			}
 	  		$summary.show();
 	  		playSumMoneyAnimation();
 
@@ -210,14 +222,27 @@
 		};
 
 		var showInvestResult = function() {
+			var state = -1;
 			$invest.fadeOut();
-			var result = calc(investMoney,leftMoney,level,dailyInfo.odds);
-			var profit = result - invest_status.base;
-			profit = Math.round(profit*100)/100;
-			sumArray.push(profit);
-			invest_status.base = result;
+			//real logic & do caculation
+			calc();
+			contentRefresh($result, resultTemplate, invest_status);
 
-			contentRefresh($result, resultTemplate, getResultJson(profit));
+			if(invest_status.base <= 0) {
+				state = stateCode.fail;
+				$("#next-confirm-btn").val("保证金不足，被强制平仓，点击继续");
+			}
+
+		  	if(invest_status.rounds >= MAX_ROUNDS) {
+		  		if(invest_status.profitPercent > 1) {
+		  			state = stateCode.good;
+		  			$("#next-confirm-btn").val("经过这一个月洗礼含笑迈上人生巅峰，查看结果");
+		  		}
+		  		else {
+		  			state = stateCode.ok;
+		  			$("#next-confirm-btn").val("悲喜交加，人生疯癫，查看结果");
+		  		}
+		  	}
 
 		  	$result.fadeIn(function() {
 		  		//play animations
@@ -225,12 +250,9 @@
 		  		//progress bar animation
 		  		//showProgressBar();
 		  		$("#next-confirm-btn").click(function(){
-		  			//real logic & do caculation
-				  	if(invest_status.rounds >= MAX_ROUNDS){
-				  		//input your name
-				  		showSummary();
-				  	}
-				  	else {
+		  			if(state >= 0) {
+		  				showSummary(state);
+		  			} else {
 				  		++invest_status.rounds;
 						startNewRounds();
 				  	}
@@ -240,8 +262,6 @@
 		//do animation
 		//deal with lever
 		gameStart();
-		
-		
 	});
 	
 	/*calc:计算盈利
