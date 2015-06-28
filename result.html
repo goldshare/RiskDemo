@@ -37,8 +37,8 @@
 		<article class="am-article am-container">
 			<header><h1 id="info"></h1></header>
 			<div id="content">
-				<p id="last-result">我的最终资产为<label id="score">10000</label></p>
-				<p><label id="user-name"></label>在这个变态模拟盘游戏中撑过了<label id="rounds">m</label>轮, 不服来战！</p>
+				<p id="last-result">我的最终盈利为<label id="score">10000</label></p>
+				<p><span id="user-name"></span>在这个变态模拟盘游戏中撑过了<span id="rounds">m</span>轮, 不服来战！</p>
 				<p><input id="share-confirm-btn" class="am-btn am-btn-secondary" type="button" value="分享">
 				<input id="game-confirm-btn" class="am-btn am-btn-primary" type="button" value="我要挑战！"></p>
 			</div>
@@ -66,7 +66,7 @@
 				$("#rounds").html(rounds);
 				$("#score").html(score);
 
-				document.title = user + '最终资产为' + score + '，在这个变态模拟盘游戏中撑过了' + rounds + '轮, 不服来战！';
+				document.title = user + '最终盈利为' + score + '，在这个变态模拟盘游戏中撑过了' + rounds + '轮, 不服来战！';
 
 				if(score < 0){
 					$("#info").html("本想迈上人生巅峰，结果登上天台。跳下去才发现，楼下已经堆满了人");

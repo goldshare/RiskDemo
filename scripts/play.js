@@ -159,8 +159,8 @@
 				var numStr = "第"+(i+1)+"天";
 				numArray.push(numStr);
 			}
-			console.log('sumArray:'+sumArray);
-			console.log('leversumArray:'+leverSumArray);
+			//console.log('sumArray:'+sumArray);
+			//console.log('leversumArray:'+leverSumArray);
 			$('#summary-container').highcharts({
 		        title: {
 		            text: '我的盈亏',
@@ -219,7 +219,7 @@
 
 	  		$("#name-confirm-btn").click(function() {
 	  			var name = $("#name-txt").val();
-	  			location.href = "result.html?u="+encodeURIComponent(name)+"&b="+invest_status.base+"&r="+invest_status.rounds;
+	  			location.href = "result.html?u="+encodeURIComponent(name)+"&b="+invest_status.profit+"&r="+invest_status.rounds;
 	  		});
 		};
 
