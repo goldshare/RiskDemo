@@ -29,7 +29,10 @@
 		originalArray[i]= i; 
 	} 
 
-	var sumArray=[];  //统计每天盈亏情况
+	var sumArray=[];       //统计每天盈亏情况
+	var levelSumArray=[];  //统计每天加杠杆盈亏情况
+
+	var stockArray=[];  //每天的股票涨跌幅
 
 	$(document).ready(function() {
 		//get compiled template function
@@ -148,7 +151,7 @@
 			var numArray=[];
 			for(var i=0;i < sumArray.length;i++){
 				var numStr = "第"+(i+1)+"天";
-				numArray.push(numStr)
+				numArray.push(numStr);
 			}
 			$('#summary-container').highcharts({
 		        title: {
@@ -169,15 +172,18 @@
 		            }]
 		        },
 		        legend: {
-		            layout: 'vertical',
-		            align: 'right',
-		            verticalAlign: 'middle',
-		            enabled: false,
+		            //layout: 'vertical',
+		            align: 'center', //水平方向位置
+                    verticalAlign: 'bottom', //垂直方向位置
+		            enabled: true,
 		            borderWidth: 0
 		        },
 		        series: [{
 		            name: '金额',
 		            data: sumArray
+		        },{
+		            name: '金额2',
+		            data: levelSumArray
 		        }],
 		        credits: {
      				enabled: false
@@ -264,24 +270,48 @@
 		gameStart();
 	});
 	
-	/*calc:计算盈利
-	 *investMoney:投入金额
-	 *leftMoney:剩余金额
-	 *level:杠杆倍数
-	 *odds:涨跌幅(如2.5、-3.5)
-	 */
-	var calc = function(investMoney,leftMoney,level,odds)
-	{
-		var principal = investMoney;          //本金
-		var levelMoney = principal*level;     //杠杆金额 
-		var interestRate = 0.0015 + 0.003*2;  //每天利息利率
-		var interestMoney = levelMoney*interestRate; //利息
-		var earnMoney = (principal + levelMoney)*odds/100;
-		var leftInvestMoney = principal + earnMoney - interestMoney + leftMoney;
-		leftInvestMoney = Math.round(leftInvestMoney*100)/100;
-		return leftInvestMoney;
-	}
 
+	/*---------------------------计算相关的方法---------------------------------*/
+	var calc = function(){
+		if(invest_status.gallon > 0){        //加仓
+			var money = invest_status.leftMoney * invest_status.gallon; //加仓金额
+			var levelMoney = money * level;  //杠杆金额
+			invest_status.investMoney += money;
+			invest_status.leftMoney -= money;
+			invest_status.levelMoney += levelMoney;
+			var bStock = stockArray[0];  //开盘价
+			var eStock = stockArray[9];  //收盘价
+			//计算今天的利润
+			var todayProfit = (money + levelMoney)*(eStock - bStock - 0.2)/100;
+			todayProfit = Math.round(todayProfit*100)/100;
+			var holdProfit = invest_status.marketValue *(eStock - 0.2)/100;
+			holdProfit = Math.round(holdProfit*100)/100;
+			var profit = todayProfit + holdProfit;
+			invest_status.profit += profit;
+			invest_status.marketValue += profit + money + levelMoney;
+			var profitPercent = invest_status.profit/invest_status.investMoney;
+			profitPercent = Math.round(profitPercent*1000)/1000;
+			invest_status.profitPercent = profitPercent * 100;
+			invest_status.base = invest_status.marketValue + invest_status.leftMoney - invest_status.levelMoney;
+		}else if(invest_status.gallon <= 0){  //减仓或不变
+			var gallon = invest_status.gallon * (-1);
+			var money = invest_status.marketValue * gallon; //减仓金额
+			//invest_status.marketValue -= money; 
+			//invest_status.leftMoney += money;
+			var todayProfit = money * (bStock - 0.2)/100; 
+			todayProfit = Math.round(todayProfit*100)/100;
+			var holdProfit = (invest_status.marketValue - money) *(eStock - 0.2)/100;
+			holdProfit = Math.round(holdProfit*100)/100;
+			var profit = todayProfit + holdProfit;
+			invest_status.profit += profit;
+			invest_status.marketValue = invest_status.marketValue - money + profit;
+			invest_status.leftMoney += money + todayProfit;
+			var profitPercent = invest_status.profit/invest_status.investMoney;
+			profitPercent = Math.round(profitPercent*1000)/1000;
+			invest_status.profitPercent = profitPercent * 100;
+			invest_status.base = invest_status.marketValue + invest_status.leftMoney - invest_status.levelMoney;
+		}
+	}
 	/*getRandom:获取不重复的随机值
 	 *返回值范围：0-（MAX_ROUNDS-1）
 	 */
@@ -291,6 +321,27 @@
 		var value = originalArray[parseInt(index)];
 		originalArray.splice(index,1);
 		return value;
+	}
+
+    /*getRandomByValue:根据输入的值生成一个振幅[-2,2]的随机数
+	 *返回值范围：[odds-2,odds+2]
+	 *当返回值>10时，返回10
+	 *当返回值<10时，返回-10
+	 */
+	var getRandomByValue = function(odds){
+		var scope = 2;           //最大涨幅
+		var hscope = scope * 2;  //最大涨幅的2倍
+		var value=Math.round((Math.random()*hscope - scope)*100)/100;
+		while(value == 0){
+			value=Math.round((Math.random()*hscope - scope)*100)/100;
+		}
+		var result = odds + value;
+		console.log(value)
+		if(result > 10)
+			result = 10;
+		if(result < -10)
+			result = -10;
+		return result;
 	}
 
     /*getStockPoint:获取股票振幅
@@ -303,12 +354,14 @@
 		var n = 10;
 		var high = 10;
 		var lower = -10;
-		for (var i=0;i<n-1;i++)
+		resultArray[0] = odds;
+		for (var i=1;i<n;i++)
 		{ 
-			var value=Math.round((Math.random()*((high - lower +1) + lower))*100)/100;  
-			resultArray[i]= value; 
+			var value = getRandomByValue(odds); 
+			value=Math.round(value*100)/100; 
+			resultArray[i] = value; 
+			odds = value;
 		} 
-		resultArray[n-1]= odds;
 		return resultArray;
 	}
 
