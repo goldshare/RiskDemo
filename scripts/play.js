@@ -87,14 +87,10 @@
 
 		var startNewRounds = function() {
 			//loading animation
-			investMoney = invest_status.base;
-			leftMoney = 0;
-			//level = 0;
-			var callback = function() {
-				
-			}
+			
 			//get info
 			getDailyInfo(function() {
+				stockArray = getStockPoint(dailyInfo.odds);
 				contentRefresh($invest, investTemplate, dailyInfo);
 				$result.hide();
 				$invest.show();
@@ -139,7 +135,7 @@
 		        },
 		        series: [{
 		            name: '实时股价',
-		            data: getStockPoint(dailyInfo.odds)
+		            data: stockArray
 		        }],
 		        credits: {
      				enabled: false
