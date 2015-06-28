@@ -35,9 +35,16 @@
 	</head>
 	<body>
 		<section id="lever" class="am-container">
-			<label>请选择你配资倍数</label>
+			<div>
+				<p>听说最近配资交易很火</p>
+				<p>楼上的小王靠4倍杠杆半年赚了400%迈上了人生的巅峰</p>
+				<p>你查阅了公司近期股价，确实有异动</p>
+				<p></p>
+				<p>这次有这么可靠的消息，搏一把！</p>
+	 		</div>
+			<label>请选择你的配资倍数</label>
 				<!-- 多选框 am-disabled -->
-				<div id="lever-btn-group" class="am-btn-group" data-am-button>
+				<div id="lever-btn-group" class="am-btn-group am-btn-group-sm" data-am-button>
 					  <label class="am-btn am-btn-default am-btn-sm am-active">
 					    <input type="radio" name="lever-options" value="0" checked id="lever-option1"> 明智的不配资
 					  </label>
@@ -54,62 +61,80 @@
 					    <input type="radio" name="lever-options" value="4" id="lever-option5"> 配资4倍
 					  </label>
 
-				<input id="lever-confirm-btn" class="am-btn am-btn-primary" type="button" value="点击确认配资倍数，正式开始交易">
+				<input id="lever-confirm-btn" class="am-btn am-btn-primary" type="button" value="确认配资倍数，正式开始交易">
 			</div>
 		</section>
 
 		<section id="invest" class="am-container">
 			<!-- 这里是每天的新闻 -->
 			<section id="daily-info">
-				<header class="daily-info-header am-u-sm-4 am-u-sm-centered">
-					<h2>第{{ROUNDS}}天</h2>
+				<header class="daily-info-header">
+					<p>第{{ROUNDS}}天</p>
 				</header>
+				<ul id="invest-info" class="am-list am-list-static">
+				<li>持仓成本：			0</li>
+				<li>借入资金：			20000</li>
+				<li>持仓市值：			0</li>
+
+				<li>账面盈利：			0，0%</li>
+				<li>可用资金：			<span id="left-money">100000</span></li>
+				<li>总资产：			<span id="invest-money">{{BASE_MONEY}}</span></li>
+				</ul>
 
 				<div class="daily-info-event">
-					<p><blockquote>第{{ROUNDS}}天信息要点:{{news}}</blockquote></p>
+					<blockquote>昨晚信息要点: {{news}}</blockquote>
 					<!-- <img src="imgs/.....jpg" alt=""> -->
 				</div>
 			</section>
-			<!-- 这里是投资表单，可以选择本金投入，然后选择杠杆 -->
-			<section id="invest-form">
-				<div>您目前拥有本金{{BASE_MONEY}}</div>
-				<label>交易决策：选择你投入本次交易的金额</label>
+			<!-- 这里是投资表单，可以选择本金投入 -->
+			<section id="invest-form" class="am-form-group am-form-group-sm">
+				<label class="am-form-label" for="base-options">以开盘价抢单，选择你本次交易的操作：</label>
 				<!-- 这个选择本次投入的本金 -->
 				<div id="base-btn-group" class="am-btn-group" data-am-button>
 					  <label class="am-btn am-btn-default am-btn-sm">
-					    <input type="radio" name="base-options" value="1" id="base-option1"> 小量投入
+					    <input type="radio" name="base-options" value="1" id="base-option1"> 加仓25%
 					  </label>
 					  <label class="am-btn am-btn-default am-btn-sm">
-					    <input type="radio" name="base-options" value="2" id="base-option2"> 大量投入
+					    <input type="radio" name="base-options" value="2" id="base-option2"> 加仓50%
 					  </label>
-					  <label class="am-btn am-btn-default am-btn-sm am-active">
-					    <input type="radio" name="base-options" value="3" id="base-option3"> 全部投入
+					  <label class="am-btn am-btn-default am-btn-sm">
+					    <input type="radio" name="base-options" value="3" id="base-option3"> 加仓75%
+					  </label>
+					  <label class="am-btn am-btn-default am-btn-sm">
+					    <input type="radio" name="base-options" value="4" id="base-option4"> 加仓100%
+					  </label>
+
+					  <label class="am-btn am-btn-default am-btn-sm">
+					    <input type="radio" name="base-options" value="5" id="base-option5"> 减仓25%
+					  </label>
+					  <label class="am-btn am-btn-default am-btn-sm">
+					    <input type="radio" name="base-options" value="6" id="base-option6"> 减仓50%
+					  </label>
+					   <label class="am-btn am-btn-default am-btn-sm">
+					    <input type="radio" name="base-options" value="7" id="base-option7"> 减仓75%
+					  </label>
+					   <label class="am-btn am-btn-default am-btn-sm">
+					    <input type="radio" name="base-options" value="8" id="base-option8"> 减仓100%
+					  </label>
+
+					   <label class="am-btn am-btn-default am-btn-sm am-active">
+					    <input type="radio" name="base-options" value="9" id="base-option9"> 保持仓位
 					  </label>
 				</div> 
-				<label>准备投入<span id="invest-money">{{BASE_MONEY}}</span>，剩余本金<span id="left-money">0</span></label>
-
-				<input id="invest-confirm-btn" class="am-btn am-btn-primary" type="button" value="确认本轮投资，完成挂单，赶去开会">
+				
+				<input id="invest-confirm-btn" class="am-btn am-btn-primary" type="button" value="确认本轮投资操作">
 			</section>
 		</section>
 
 
 		<section id="result" class="am-container">
-			<header class="daily-info-header am-u-sm-6 am-u-sm-centered">
-					<h2>第{{ROUNDS}}天战况</h2>
+			<header class="daily-info-header">
+					<p>第{{ROUNDS}}天</p>
 			</header>
+			<div class="invest-animation" id="container" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
 			<div class="invest-info">你投入{{investMoney}}本金，加上{{level}}倍杠杆</div>
 			<!-- am-badge am-badge-success am-radius -->
-			<div class="invest-animation" id="container" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
-			<div class="invest-result">本次交易
-			{{#compare profit 0}}
-				<span class="am-badge am-badge-danger am-radius">获利</span>
-			{{else}}
-    			<span class="am-badge am-badge-success am-radius">亏损</span>
-  			{{/compare}}<strong>{{profit}}</strong>，您最终本金为<strong>{{BASE_MONEY}}</strong></div>
-			<!-- 进度条 
-			<div class="am-progress am-progress-striped am-progress-sm am-active">
-				<div id="result-progress-bar" class="am-progress-bar" style="width: 0%">0%</div>
-			</div>-->
+			
 			<input id="next-confirm-btn" class="am-btn am-btn-primary" type="button" value="进入下一轮投资，忐忑度过整晚">
 		</section>
 
@@ -121,6 +146,7 @@
 		</section>
 		
 		<script type="text/javascript" src="assets/jquery.min.js"></script>
+		<script type="text/javascript" src="assets/js/amazeui.min.js"></script>
 		<script type="text/javascript" src="assets/highcharts.js"></script>
 		<script type="text/javascript" src="assets/handlebars.min.js"></script>
 		<script src="scripts/data.js"></script>
