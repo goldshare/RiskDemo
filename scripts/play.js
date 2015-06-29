@@ -172,7 +172,7 @@
 			//console.log('leversumArray:'+leverSumArray);
 			$('#summary-container').highcharts({
 		        title: {
-		            text: '我的盈亏',
+		            text: '我每日的盈亏',
 		            x: -20 //center
 		        },
 		        xAxis: {
@@ -246,6 +246,12 @@
 
 		var showInvestResult = function() {
 			var state = -1;
+			//防止不选择加减仓，直接点确认 
+			//TODO bug待修改
+			/*var option =Number($('input[name="base-options"]:checked').val());
+			var options = [0.25, 0.5, 0.75, 1, -0.25, -0.5, -0.75, -1, 0]; //TODO: can use data attr
+			invest_status.gallon = options[option - 1];
+			no_invest_status.gallon = invest_status.gallon; */
 			$invest.fadeOut();
 			//real logic & do caculation
 			calc();
@@ -291,58 +297,42 @@
 
 	/*---------------------------计算相关的方法---------------------------------*/
 	var calc = function(){
-		/*console.log('level:'+level);
-		console.log('invest_status.investMoney:'+invest_status.investMoney);
-		console.log('invest_status.leverMoney:'+invest_status.leverMoney);
-		console.log('invest_status.profit:'+invest_status.profit);
-		console.log('invest_status.marketValue:'+invest_status.marketValue);
-		console.log('invest_status.base:'+invest_status.base);*/
+		var bStock = stockArray[0]/100;  //开盘价
+		var eStock = stockArray[9]/100;  //收盘价
 		if(invest_status.gallon > 0){        //加仓
 			var money = invest_status.leftMoney * invest_status.gallon; //加仓金额
 			var leverMoney = money * level;  //杠杆金额
 			invest_status.investMoney += money;
 			invest_status.leftMoney -= money;
 			invest_status.leverMoney += leverMoney;
-			var bStock = stockArray[0];  //开盘价
-			var eStock = stockArray[9];  //收盘价
-			//计算今天的利润
-			var todayProfit = (money + leverMoney)*(eStock - bStock - 0.2)/100;
-			var holdProfit = invest_status.marketValue *(eStock - 0.2)/100;
-			var profit = todayProfit + holdProfit;
-			invest_status.profit += profit;
-			profit = Math.round(profit*100)/100;
-			leverSumArray.push(profit);
-			invest_status.marketValue += profit + money + leverMoney;
-			if(invest_status.investMoney != 0){
-				var profitPercent = invest_status.profit/invest_status.investMoney;
-				profitPercent = Math.round(profitPercent*1000)/1000;
-				invest_status.profitPercent = profitPercent * 100;
-			}else{
-				invest_status.profitPercent = 0;
-			}
-			invest_status.base = invest_status.marketValue + invest_status.leftMoney - invest_status.leverMoney;
+			//计算市值
+			var holdMarketValue = invest_status.marketValue*eStock;
+			var addMarketValue = (money + leverMoney)*(1+eStock)/(1+bStock);
+			invest_status.marketValue = holdMarketValue + addMarketValue;
 		}else if(invest_status.gallon <= 0){  //减仓或不变
 			var gallon = invest_status.gallon * (-1);
-			var money = invest_status.marketValue * gallon; //减仓金额
-			var bStock = stockArray[0];  //开盘价
-			var eStock = stockArray[9];  //收盘价
-			var todayProfit = money * (bStock - 0.2)/100; 
-			var holdProfit = (invest_status.marketValue - money) *(eStock - 0.2)/100;
-			var profit = todayProfit + holdProfit;
-			invest_status.profit += profit;
-			profit = Math.round(profit*100)/100;
-			leverSumArray.push(profit);
-			invest_status.marketValue = invest_status.marketValue - money + profit;
-			invest_status.leftMoney += money + todayProfit;
-			if(invest_status.investMoney != 0){
-				var profitPercent = invest_status.profit/invest_status.investMoney;
-				profitPercent = Math.round(profitPercent*1000)/1000;
-				invest_status.profitPercent = profitPercent * 100;
-			}else{
-				invest_status.profitPercent = 0;
-			}
-			invest_status.base = invest_status.marketValue + invest_status.leftMoney - invest_status.leverMoney;
+			var marketValue = invest_status.marketValue*(1-gallon)*(1+eStock); //剩余市值
+			var lightenMarket = invest_status.marketValue*gallon*(1+bStock); //减仓市值
+            var investMoney = invest_status.investMoney * gallon;  //减仓的本金
+			var leverMoney = invest_status.leverMoney * gallon;    //减仓的杠杆金
+			invest_status.investMoney -= investMoney;
+			invest_status.leverMoney -= leverMoney;
+			invest_status.leftMoney += investMoney;
+			invest_status.leftMoney += lightenMarket - investMoney - leverMoney;
+			invest_status.marketValue = marketValue;
 		}
+
+	    var profit = invest_status.marketValue  + invest_status.leftMoney - invest_status.leverMoney - START_BASE;  //总利润
+		var todayProfit = profit - invest_status.profit;
+		todayProfit = Math.round(todayProfit*100)/100;
+		leverSumArray.push(todayProfit);
+		invest_status.profit = profit;
+		var profitPercent = invest_status.profit/START_BASE;
+		profitPercent = Math.round(profitPercent*1000)/1000;
+		invest_status.profitPercent = profitPercent * 100;
+
+		invest_status.base = invest_status.marketValue + invest_status.leftMoney - invest_status.leverMoney;
+
 		invest_status.investMoney = Math.round(invest_status.investMoney*100)/100;
 		invest_status.leftMoney = Math.round(invest_status.leftMoney*100)/100;
 		invest_status.leverMoney = Math.round(invest_status.leverMoney*100)/100;
@@ -350,62 +340,46 @@
 		invest_status.marketValue = Math.round(invest_status.marketValue*100)/100;
 		invest_status.profitPercent = Math.round(invest_status.profitPercent*100)/100;
 		invest_status.base = Math.round(invest_status.base*100)/100;
-		// console.log('level:'+level);
-		// console.log('invest_status.investMoney:'+invest_status.investMoney);
-		// console.log('invest_status.leverMoney:'+invest_status.leverMoney);
-		// console.log('invest_status.profit:'+invest_status.profit);
-		// console.log('invest_status.marketValue:'+invest_status.marketValue);
-		// console.log('invest_status.base:'+invest_status.base);
 	}
 
 	var no_calc = function(){
 		var no_level = 0;
+		var bStock = stockArray[0]/100;  //开盘价
+		var eStock = stockArray[9]/100;  //收盘价
 		if(no_invest_status.gallon > 0){        //加仓
 			var money = no_invest_status.leftMoney * no_invest_status.gallon; //加仓金额
 			var leverMoney = money * no_level;  //杠杆金额
 			no_invest_status.investMoney += money;
 			no_invest_status.leftMoney -= money;
 			no_invest_status.leverMoney += leverMoney;
-			var bStock = stockArray[0];  //开盘价
-			var eStock = stockArray[9];  //收盘价
-			//计算今天的利润
-			var todayProfit = (money + leverMoney)*(eStock - bStock - 0.2)/100;
-			var holdProfit = no_invest_status.marketValue *(eStock - 0.2)/100;
-			var profit = todayProfit + holdProfit;
-			no_invest_status.profit += profit;
-			profit = Math.round(profit*100)/100;
-			sumArray.push(profit);
-			no_invest_status.marketValue += profit + money + leverMoney;
-			if(no_invest_status.investMoney != 0){
-				var profitPercent = no_invest_status.profit/no_invest_status.investMoney;
-				profitPercent = Math.round(profitPercent*1000)/1000;
-				no_invest_status.profitPercent = profitPercent * 100;
-			}else{
-				no_invest_status.profitPercent = 0;
-			}
-			no_invest_status.base = no_invest_status.marketValue + no_invest_status.leftMoney - no_invest_status.leverMoney;
+			//计算市值
+			var holdMarketValue = no_invest_status.marketValue*eStock;
+			var addMarketValue = (money + leverMoney)*(1+eStock)/(1+bStock);
+			no_invest_status.marketValue = holdMarketValue + addMarketValue;
 		}else if(no_invest_status.gallon <= 0){  //减仓或不变
 			var gallon = no_invest_status.gallon * (-1);
-			var money = no_invest_status.marketValue * gallon; //减仓金额
-			var bStock = stockArray[0];  //开盘价
-			var eStock = stockArray[9];  //收盘价
-			var todayProfit = money * (bStock - 0.2)/100; 
-			var holdProfit = (no_invest_status.marketValue - money) *(eStock - 0.2)/100;
-			var profit = todayProfit + holdProfit;
-			no_invest_status.profit += profit;
-			profit = Math.round(profit*100)/100;
-			sumArray.push(profit);
-			no_invest_status.marketValue = no_invest_status.marketValue - money + profit;
-			no_invest_status.leftMoney += money + todayProfit;
-			if(no_invest_status.investMoney != 0){
-				var profitPercent = no_invest_status.profit/no_invest_status.investMoney;
-				profitPercent = Math.round(profitPercent*1000)/1000;
-				no_invest_status.profitPercent = profitPercent * 100;
-			}else{
-				no_invest_status.profitPercent = 0;
-			}
-			no_invest_status.base = no_invest_status.marketValue + no_invest_status.leftMoney - no_invest_status.leverMoney;
+			var marketValue = no_invest_status.marketValue*(1-gallon)*(1+eStock); //剩余市值
+			var lightenMarket = no_invest_status.marketValue*gallon*(1+bStock); //减仓市值
+            var investMoney = no_invest_status.investMoney * gallon;  //减仓的本金
+			var leverMoney = no_invest_status.leverMoney * gallon;    //减仓的杠杆金
+			no_invest_status.investMoney -= investMoney;
+			no_invest_status.leverMoney -= leverMoney;
+			no_invest_status.leftMoney += investMoney;
+			no_invest_status.leftMoney += lightenMarket - investMoney - leverMoney;
+			no_invest_status.marketValue = marketValue;
 		}
+
+	    var profit = no_invest_status.marketValue  + no_invest_status.leftMoney - no_invest_status.leverMoney - START_BASE;  //总利润
+		var todayProfit = profit - no_invest_status.profit;
+		todayProfit = Math.round(todayProfit*100)/100;
+		sumArray.push(todayProfit);
+		no_invest_status.profit = profit;
+		var profitPercent = no_invest_status.profit/START_BASE;
+		profitPercent = Math.round(profitPercent*1000)/1000;
+		no_invest_status.profitPercent = profitPercent * 100;
+
+		no_invest_status.base = no_invest_status.marketValue + no_invest_status.leftMoney - no_invest_status.leverMoney;
+
 		no_invest_status.investMoney = Math.round(no_invest_status.investMoney*100)/100;
 		no_invest_status.leftMoney = Math.round(no_invest_status.leftMoney*100)/100;
 		no_invest_status.leverMoney = Math.round(no_invest_status.leverMoney*100)/100;
@@ -414,6 +388,7 @@
 		no_invest_status.profitPercent = Math.round(no_invest_status.profitPercent*100)/100;
 		no_invest_status.base = Math.round(no_invest_status.base*100)/100;
 	}
+
 	/*getRandom:获取不重复的随机值
 	 *返回值范围：0-（MAX_ROUNDS-1）
 	 */
