@@ -1,28 +1,29 @@
 (function(){
 	var MAX_ROUNDS = 10;
+	var START_BASE = 100000;
 
 	var no_invest_status = {
 		rounds: 1,
 		gallon: 0,
 		investMoney: 0,
-		leftMoney: 100000,
+		leftMoney: START_BASE,
 		marketValue: 0,
 		profit: 0,
 		profitPercent: 0,
 		leverMoney: 0,
-		base : 100000 //$ original 
+		base : START_BASE //$ original 
 	};
 
 	var invest_status = {
 		rounds: 1,
 		gallon: 0,
 		investMoney: 0,
-		leftMoney: 100000,
+		leftMoney: START_BASE,
 		marketValue: 0,
 		profit: 0,
 		profitPercent: 0,
 		leverMoney: 0,
-		base : 100000 //$ original 
+		base : START_BASE //$ original 
 	};
 	
 	var level = 0;
@@ -257,7 +258,7 @@
 			}
 
 		  	if(invest_status.rounds >= MAX_ROUNDS) {
-		  		if(invest_status.base > 10000) {
+		  		if(invest_status.base > START_BASE) {
 		  			state = stateCode.good;
 		  			$("#next-confirm-btn").val("经过这一个月洗礼含笑迈上人生巅峰，查看结果");
 		  		}
@@ -349,12 +350,12 @@
 		invest_status.marketValue = Math.round(invest_status.marketValue*100)/100;
 		invest_status.profitPercent = Math.round(invest_status.profitPercent*100)/100;
 		invest_status.base = Math.round(invest_status.base*100)/100;
-		console.log('level:'+level);
-		console.log('invest_status.investMoney:'+invest_status.investMoney);
-		console.log('invest_status.leverMoney:'+invest_status.leverMoney);
-		console.log('invest_status.profit:'+invest_status.profit);
-		console.log('invest_status.marketValue:'+invest_status.marketValue);
-		console.log('invest_status.base:'+invest_status.base);
+		// console.log('level:'+level);
+		// console.log('invest_status.investMoney:'+invest_status.investMoney);
+		// console.log('invest_status.leverMoney:'+invest_status.leverMoney);
+		// console.log('invest_status.profit:'+invest_status.profit);
+		// console.log('invest_status.marketValue:'+invest_status.marketValue);
+		// console.log('invest_status.base:'+invest_status.base);
 	}
 
 	var no_calc = function(){
