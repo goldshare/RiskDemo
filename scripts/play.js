@@ -78,6 +78,14 @@
 		}
 
 		var bindEvent = function() {
+			if (invest_status.leftMoney == 0) {
+				$(".add-ops").hide();
+			} else if (invest_status.marketValue == 0) {
+				$(".sub-ops").hide();
+			} else {
+				$(".sub-ops").show();
+				$(".add-ops").show();
+			}
 			
 			$('#invest-confirm-btn').click(function () {
 		  		showInvestResult();
@@ -112,7 +120,7 @@
 		var playStockAnimation = function() {
 			$('#container').highcharts({
 		        title: {
-		            text: '宇宙科技股份有限公司当天走势',
+		            text: '宇宙科技股份有限公司第'+ invest_status.rounds +'天走势',
 		            x: -20 //center
 		        },
 		        subtitle: {

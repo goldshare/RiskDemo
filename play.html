@@ -91,34 +91,34 @@
 				<label class="am-form-label" for="base-options">以开盘价抢单，选择你本次交易的操作：</label>
 				<!-- 这个选择本次投入的本金 -->
 				<div id="base-btn-group" class="am-btn-group" data-am-button>
-					  <label class="am-btn am-btn-default am-btn-sm">
+					  <label class="am-btn am-btn-default am-btn-sm add-ops">
 					    <input type="radio" name="base-options" value="1" id="base-option1"> 加仓25%
 					  </label>
-					  <label class="am-btn am-btn-default am-btn-sm">
+					  <label class="am-btn am-btn-default am-btn-sm add-ops">
 					    <input type="radio" name="base-options" value="2" id="base-option2"> 加仓50%
 					  </label>
-					  <label class="am-btn am-btn-default am-btn-sm">
+					  <label class="am-btn am-btn-default am-btn-sm add-ops">
 					    <input type="radio" name="base-options" value="3" id="base-option3"> 加仓75%
 					  </label>
-					  <label class="am-btn am-btn-default am-btn-sm">
+					  <label class="am-btn am-btn-default am-btn-sm add-ops">
 					    <input type="radio" name="base-options" value="4" id="base-option4"> 加仓100%
 					  </label>
 
-					  <label class="am-btn am-btn-default am-btn-sm">
-					    <input type="radio" name="base-options" value="5" id="base-option5"> 减仓25%
+					  <label class="am-btn am-btn-default am-btn-sm sub-ops">
+					    <input type="radio" class="sub-ops" name="base-options" value="5" id="base-option5"> 减仓25%
 					  </label>
-					  <label class="am-btn am-btn-default am-btn-sm">
-					    <input type="radio" name="base-options" value="6" id="base-option6"> 减仓50%
+					  <label class="am-btn am-btn-default am-btn-sm sub-ops">
+					    <input type="radio" class="sub-ops" name="base-options" value="6" id="base-option6"> 减仓50%
 					  </label>
-					   <label class="am-btn am-btn-default am-btn-sm">
-					    <input type="radio" name="base-options" value="7" id="base-option7"> 减仓75%
+					   <label class="am-btn am-btn-default am-btn-sm sub-ops">
+					    <input type="radio" class="sub-ops" name="base-options" value="7" id="base-option7"> 减仓75%
 					  </label>
-					   <label class="am-btn am-btn-default am-btn-sm">
-					    <input type="radio" name="base-options" value="8" id="base-option8"> 减仓100%
+					   <label class="am-btn am-btn-default am-btn-sm sub-ops">
+					    <input type="radio" class="sub-ops" name="base-options" value="8" id="base-option8"> 减仓100%
 					  </label>
 
-					   <label class="am-btn am-btn-default am-btn-sm am-active">
-					    <input type="radio" name="base-options" value="9" id="base-option9"> 保持仓位
+					   <label class="am-btn am-btn-default am-btn-sm sub-ops am-active">
+					    <input type="radio" class="sub-ops" name="base-options" value="9" id="base-option9"> 保持仓位
 					  </label>
 				</div> 
 				
@@ -128,9 +128,6 @@
 
 
 		<section id="result" class="am-container">
-			<header class="daily-info-header">
-					<p>第{{rounds}}天</p>
-			</header>
 			<div class="invest-animation" id="container" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
 			<ul id="invest-info" class="am-list am-list-static">
 					<li>持仓成本：	<span>{{investMoney}}</span></li>
