@@ -238,7 +238,7 @@
 			$summary.hide();
 
 			$("#lever-confirm-btn").click(function(){
-				level = $('input[name="lever-options"]:checked').val();
+				level = Number($('input[name="lever-options"]:checked').val());
 				$("#lever").hide();
 				startNewRounds();
 			});
