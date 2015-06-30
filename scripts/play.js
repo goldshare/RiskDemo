@@ -79,13 +79,10 @@
 		}
 
 		var bindEvent = function() {
-			if (invest_status.leftMoney == 0) {
-				$(".add-ops").hide();
-			} else if (invest_status.marketValue == 0) {
-				$(".sub-ops").hide();
-			} else {
-				$(".sub-ops").show();
-				$(".add-ops").show();
+
+			function setButton($button) {
+				$button.addClass('am-active');
+				$button.children().attr('checked',true).trigger("change");
 			}
 			
 			$('#invest-confirm-btn').click(function () {
@@ -100,6 +97,18 @@
 				//$("#invest-money").html(investMoney);
 				//$("#left-money").html(invest_status.leftMoney);
 			});
+
+			if (invest_status.leftMoney == 0) {
+				setButton($("#base-option9"));
+				$(".add-ops").hide();
+			} else if (invest_status.marketValue == 0) {
+				setButton($("#base-option1"));
+				$(".sub-ops").hide();
+			} else {
+				setButton($("#base-option9"));
+				$(".sub-ops").show();
+				$(".add-ops").show();
+			}
 			
 		}
 
