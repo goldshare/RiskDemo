@@ -1,0 +1,26 @@
+{
+  "name": "riskdemo",
+  "version": "1.0.0",
+  "description": "risk demo for szse",
+  "main": "gruntfile.js",
+  "dependencies": {
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-contrib-connect": "^0.11.2",
+    "load-grunt-tasks": "^3.4.0",
+    "grunt": "^0.4.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/chaozh/riskdemo.git"
+  },
+  "author": "chaozh",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/chaozh/riskdemo/issues"
+  },
+  "homepage": "https://github.com/chaozh/riskdemo#readme"
+}

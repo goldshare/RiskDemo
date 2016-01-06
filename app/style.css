@@ -1,0 +1,72 @@
+/*
+ * global
+ *
+ */
+#content {
+  min-height: 300px;
+}
+/*
+ * index.html
+ *
+ */
+#game p {
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+}
+#member-intro ul {
+  margin: 0 0 1rem;
+}
+/*
+ * play.html
+ *
+ */
+#lever {
+  margin-top: 10px;
+}
+
+#lever-confirm-btn, 
+#invest-confirm-btn {
+  margin-top: 20px;
+}
+#invest-info {
+  margin: 5px !important;
+}
+#invest-info li {
+  border: none !important;
+  padding: 0 !important;
+  
+}
+/*
+ * result.html
+ *
+ */
+html,body{ height:100% } 
+#info {
+  margin-top: 40px;
+}
+#last-result {
+  color: #c82829;
+}
+#shareit {
+  -webkit-user-select: none;
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.85);
+  text-align: center;
+  top: 0;
+  left: 0;
+  z-index: 105;
+}
+#shareit img {
+  max-width: 100%;
+}
+.arrow {
+  position: absolute;
+  right: 10%;
+  top: 5%;
+}
+#share-text {
+  margin-top: 100px;
+}
